@@ -1,0 +1,49 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #282828;
+  color: #f0f0f0;
+}
+      
+#searchTerm {
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: none;
+  /*box-shadow: 1px 1px #ddd;*/
+  width: 70%;
+  margin-bottom: 20px;
+  background-color: #424242;
+  color: #f0f0f0;
+}
+      
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  justify-content:center;
+  margin-left: 10px;
+}
+
+#results {
+  background-color: #282828;
+  padding: 20px;
+  border-radius: 5px;
+  /*box-shadow: 1px 1px #ddd;*/
+  display: none;
+}
+      
+#codesTable {
+  width: 75%;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+}
+      
+#codesTable th, #codesTable td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+#codesTable tr:nth-child(even) {
+  background-color: #3b3b3b;
+}

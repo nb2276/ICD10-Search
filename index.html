@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <h1 style="text-align:center;margin-top:50px;">ICD-10 Code Search</h1>
+    <div style="display:flex;justify-content:center;">
+      <input type="text" id="searchTerm">
+    </div>
+    <div class="checkbox-container">
+      <input type="checkbox" id="selectIMRT">
+      <label for="selectIMRT" style="margin-right: 5px;">IMRT Codes</label>
+      <input type="checkbox" id="selectMalignant">
+      <label for="selectMalignant" style="margin-right: 5px;">Malignancy Codes</label>
+      <input type="checkbox" id="selectInSitu">
+      <label for="selectInSitu" style="margin-right: 5px;">In Situ Codes</label>
+      <input type="checkbox" id="selectBenign">
+      <label for="selectBenign" style="margin-right: 5px;">Benign Codes</label>
+    </div>
+    <div id="results">
+      <table id="codesTable">
+        <tr>
+          <th>Code</th>
+          <th>Diagnosis</th>
+        </tr>
+      </table>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -10,13 +10,17 @@
     </div>
     <div class="checkbox-container">
       <input type="checkbox" id="selectIMRT">
-      <label for="selectIMRT" style="margin-right: 5px;">IMRT Codes</label>
-      <input type="checkbox" id="selectMalignant">
-      <label for="selectMalignant" style="margin-right: 5px;">Malignancy Codes</label>
-      <input type="checkbox" id="selectInSitu">
-      <label for="selectInSitu" style="margin-right: 5px;">In Situ Codes</label>
-      <input type="checkbox" id="selectBenign">
-      <label for="selectBenign" style="margin-right: 5px;">Benign Codes</label>
+      <label for="selectIMRT" style="margin-right: 5px;">IMRT</label>
+      <input type="radio" name="type" id="all">
+      <label for="all" style="margin-right: 5px;">All</label>
+      <input type="radio" name="type" id="selectMalignant" checked>
+      <label for="selectMalignant" style="margin-right: 5px;">Malignancy</label>
+      <input type="radio" name="type" id="selectInSitu">
+      <label for="selectInSitu" style="margin-right: 5px;">In Situ</label>
+      <input type="radio" name="type" id="selectBenign">
+      <label for="selectBenign" style="margin-right: 5px;">Benign Neoplasm</label>
+      <input type="radio" name="type" id="selectZ">
+      <label for="selectZ" style="margin-right: 5px;">Z Code</label>
     </div>
     <div id="results">
       <table id="codesTable">

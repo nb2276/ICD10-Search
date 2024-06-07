@@ -63,6 +63,10 @@ const searchTerm = document.getElementById("searchTerm");
 const codesTable = document.getElementById("codesTable");
 const results = document.getElementById("results");
 const selectIMRTchecked = document.getElementById('selectIMRT');
+const selectMalignantchecked = document.getElementById('selectMalignant');
+const selectInSituchecked = document.getElementById('selectInSitu');
+const selectBenignchecked = document.getElementById('selectBenign');
+const selectZchecked = document.getElementById('selectZ');
 
 selectIMRTchecked.addEventListener("change", function(event) {
   if(event.target.checked) {
@@ -71,13 +75,46 @@ selectIMRTchecked.addEventListener("change", function(event) {
     else {
       SEARCHLIST = ICD_10_CODES;
     }
+    performSearch();
 });
 
+selectMalignantchecked.addEventListener("change", function() {
+  performSearch();
+});
 
-searchTerm.addEventListener("input", function() {
-  
+selectInSituchecked.addEventListener("change", function() {
+  performSearch();
+});
+
+selectBenignchecked.addEventListener("change", function() {
+  performSearch();
+});
+
+selectZchecked.addEventListener("change", function() {
+  performSearch();
+});
+
+function performSearch(){
   // Get the search term
-  const term = searchTerm.value.toLowerCase();
+  let term = searchTerm.value.toLowerCase();
+
+  // If the radio button is checked, append a specific word to the search term
+  if (selectMalignantchecked.checked) {
+    term += ' malignant';
+  }
+
+  if(selectInSituchecked.checked) {
+    term += ' in situ';
+  }
+
+  if(selectBenignchecked.checked) {
+    term += ' benign';
+  }
+
+  if(selectZchecked.checked) {
+    term += ' personal history neoplasm';
+  }
+
   const words = term.split(" ");
 
   // Clear the table
@@ -110,4 +147,6 @@ searchTerm.addEventListener("input", function() {
     } else {
       results.style.display = "none";
     }
-});
+};
+
+searchTerm.addEventListener("input", performSearch);

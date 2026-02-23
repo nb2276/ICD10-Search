@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PSA Doubling Time Calculator</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <nav>
+      <a class="nav-brand" href="index.html">Medical Tools</a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">ICD-10 Search</a>
+        <a href="psa.html" class="nav-link active">PSA Calculator</a>
+        <a href="about.html" class="nav-link">About</a>
+      </div>
+    </nav>
+
+    <div class="psa-container">
+      <h3 style="text-align:center;margin-top:16px;margin-bottom:20px;">PSA Doubling Time Calculator</h3>
+
+      <div class="input-section">
+        <label for="psaInput">Enter PSA measurements — one per line:</label>
+        <p class="help-text">
+          Each line should contain a <strong style="color:#ccc;">date</strong> and a <strong style="color:#ccc;">PSA value</strong>.
+          Dates are detected automatically in most common formats. Values may optionally include the label "PSA".
+          Lines are separated by commas, spaces, semicolons, or pipes.
+        </p>
+        <p class="help-text example">
+          01/15/2023 1.20<br>
+          06.20.2023, PSA 2.4<br>
+          12/01/2023 4.8<br>
+          2024-06-15, 9.1<br>
+          15.01.2025 18.7
+        </p>
+        <textarea id="psaInput" spellcheck="false" placeholder="01/15/2023  1.20
+06/20/2023  2.40
+12/01/2023  4.80"></textarea>
+        <button class="calc-button" onclick="calculate()">Calculate Doubling Time</button>
+      </div>
+
+      <div id="psaError" class="error-msg" style="display:none;"></div>
+
+      <div id="psaResults" style="display:none;">
+        <div class="result-card">
+          <div class="result-label">PSA Doubling Time</div>
+          <div id="doublingTime" class="result-value"></div>
+        </div>
+
+        <div class="chart-section">
+          <p class="chart-hint">Click anywhere on the chart to see the expected PSA at that date.</p>
+          <div id="clickInfo" class="click-info" style="display:none;"></div>
+          <canvas id="psaChart"></canvas>
+        </div>
+
+        <div class="parsed-data-section">
+          <h4>Parsed Measurements</h4>
+          <table id="parsedTable">
+            <tr>
+              <th>Date</th>
+              <th>PSA (ng/mL)</th>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart.js with date-fns adapter for time scale support -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="psa.js"></script>
+  </body>
+</html>

@@ -1,21 +1,31 @@
 <!DOCTYPE html>
 <html>
   <head>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>ICD-10 Code Search</title>
+    <link rel="stylesheet" href="style.css">
   </head>
-  
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PP2FRCMYS1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-PP2FRCMYS1');
-</script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PP2FRCMYS1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PP2FRCMYS1');
+  </script>
 
   <body>
-    <h3 style="text-align:center;margin-top:10px;">ICD-10 Code Search</h1>
+    <nav>
+      <a class="nav-brand" href="index.html">Medical Tools</a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link active">ICD-10 Search</a>
+        <a href="psa.html" class="nav-link">PSA Calculator</a>
+        <a href="about.html" class="nav-link">About</a>
+      </div>
+    </nav>
+
+    <h3 style="text-align:center;margin-top:16px;">ICD-10 Code Search</h3>
     <div style="display:flex;justify-content:center;">
       <input type="text" id="searchTerm">
     </div>

@@ -1,25 +1,87 @@
+/* -----------------------------------------------------------------------
+   Base
+----------------------------------------------------------------------- */
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: Arial, sans-serif;
   background-color: #282828;
   color: #f0f0f0;
+  margin: 0;
+  padding: 0;
 }
-      
+
+/* -----------------------------------------------------------------------
+   Navigation
+----------------------------------------------------------------------- */
+nav {
+  background-color: #1e1e1e;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  height: 50px;
+  border-bottom: 2px solid #383838;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-brand {
+  font-weight: bold;
+  font-size: 15px;
+  color: #f0f0f0;
+  text-decoration: none;
+  margin-right: 28px;
+  white-space: nowrap;
+}
+
+.nav-links {
+  display: flex;
+}
+
+.nav-link {
+  color: #999;
+  text-decoration: none;
+  padding: 0 14px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  transition: color 0.15s;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+}
+
+.nav-link:hover {
+  color: #f0f0f0;
+}
+
+.nav-link.active {
+  color: #4fc3f7;
+  border-bottom: 2px solid #4fc3f7;
+}
+
+/* -----------------------------------------------------------------------
+   ICD-10 Search page
+----------------------------------------------------------------------- */
 #searchTerm {
   padding: 10px;
   font-size: 14px;
   border-radius: 5px;
   border: none;
-  /*box-shadow: 1px 1px #ddd;*/
   width: 70%;
   margin-bottom: 20px;
   background-color: #424242;
   color: #f0f0f0;
+  margin-top: 16px;
 }
-      
+
 .checkbox-container {
   display: flex;
   align-items: center;
-  justify-content:center;
+  justify-content: center;
   margin-left: 10px;
 }
 
@@ -27,17 +89,16 @@ body {
   background-color: #282828;
   padding: 20px;
   border-radius: 5px;
-  /*box-shadow: 1px 1px #ddd;*/
   display: none;
 }
-      
+
 #codesTable {
   width: 75%;
   border-collapse: collapse;
   margin-left: auto;
   margin-right: auto;
 }
-      
+
 #codesTable th, #codesTable td {
   padding: 8px;
   text-align: left;
@@ -46,4 +107,232 @@ body {
 
 #codesTable tr:nth-child(even) {
   background-color: #3b3b3b;
+}
+
+/* -----------------------------------------------------------------------
+   PSA Calculator page
+----------------------------------------------------------------------- */
+.psa-container {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 20px 24px 40px;
+}
+
+.input-section {
+  margin-bottom: 24px;
+}
+
+.input-section > label {
+  display: block;
+  font-size: 14px;
+  color: #c0c0c0;
+  margin-bottom: 6px;
+}
+
+.help-text {
+  font-size: 12px;
+  color: #777;
+  margin: 4px 0 8px;
+  line-height: 1.5;
+}
+
+.help-text.example {
+  background-color: #1e1e1e;
+  padding: 8px 14px;
+  border-radius: 4px;
+  border-left: 3px solid #4fc3f7;
+  font-family: monospace;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #aaa;
+}
+
+#psaInput {
+  width: 100%;
+  height: 130px;
+  background-color: #424242;
+  color: #f0f0f0;
+  border: 1px solid #555;
+  border-radius: 5px;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-family: monospace;
+  resize: vertical;
+  display: block;
+  margin-top: 8px;
+}
+
+#psaInput:focus {
+  outline: none;
+  border-color: #4fc3f7;
+}
+
+.calc-button {
+  margin-top: 12px;
+  padding: 9px 28px;
+  background-color: #4fc3f7;
+  color: #1a1a1a;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.calc-button:hover {
+  background-color: #81d4fa;
+}
+
+.error-msg {
+  background-color: #4e1c1c;
+  color: #ff8a80;
+  padding: 10px 16px;
+  border-radius: 5px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.result-card {
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  padding: 16px 24px;
+  display: inline-block;
+  margin-bottom: 24px;
+}
+
+.result-label {
+  font-size: 11px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+
+.result-value {
+  font-size: 26px;
+  font-weight: bold;
+  color: #4fc3f7;
+}
+
+.chart-section {
+  margin-bottom: 28px;
+}
+
+.chart-hint {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.click-info {
+  background-color: #1e1e1e;
+  border: 1px solid #4fc3f7;
+  border-radius: 5px;
+  padding: 8px 16px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #e0e0e0;
+}
+
+#psaChart {
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  padding: 8px;
+  display: block;
+  width: 100% !important;
+}
+
+.parsed-data-section h4 {
+  color: #999;
+  font-size: 13px;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0 0 10px;
+}
+
+#parsedTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+#parsedTable th {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid #444;
+  color: #999;
+  font-weight: normal;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#parsedTable td {
+  padding: 7px 10px;
+  border-bottom: 1px solid #333;
+  color: #ccc;
+}
+
+#parsedTable tr:nth-child(even) td {
+  background-color: #232323;
+}
+
+/* -----------------------------------------------------------------------
+   About page
+----------------------------------------------------------------------- */
+.about-container {
+  max-width: 680px;
+  margin: 48px auto;
+  padding: 0 24px;
+}
+
+.about-card {
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  padding: 36px 40px;
+}
+
+.about-card h2 {
+  margin: 0 0 6px;
+  font-size: 26px;
+  color: #f0f0f0;
+}
+
+.about-subtitle {
+  color: #4fc3f7;
+  font-size: 15px;
+  margin: 0 0 24px;
+}
+
+.about-divider {
+  border: none;
+  border-top: 1px solid #333;
+  margin: 20px 0 24px;
+}
+
+.about-card p {
+  color: #bbb;
+  line-height: 1.75;
+  font-size: 14px;
+  margin: 0 0 16px;
+}
+
+.about-card h3 {
+  color: #e0e0e0;
+  font-size: 15px;
+  margin: 24px 0 10px;
+}
+
+.about-card ul {
+  color: #bbb;
+  line-height: 1.85;
+  font-size: 14px;
+  padding-left: 20px;
+  margin: 0;
+}
+
+.about-card ul li {
+  margin-bottom: 10px;
 }

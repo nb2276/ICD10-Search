@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Background -->
+  <rect width="64" height="64" rx="10" fill="#1e1e1e"/>
+
+  <!-- Toolbox body -->
+  <rect x="5" y="24" width="54" height="34" rx="4" fill="#1a2a3a" stroke="#4fc3f7" stroke-width="2.5"/>
+
+  <!-- Toolbox handle -->
+  <path d="M 22 24 L 22 16 Q 22 10 28 10 L 36 10 Q 42 10 42 16 L 42 24"
+        fill="none" stroke="#4fc3f7" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Lid divider -->
+  <line x1="5" y1="34" x2="59" y2="34" stroke="#4fc3f7" stroke-width="1.5" opacity="0.4"/>
+
+  <!-- Radiation trefoil  center=(32,46)  inner_r=4  outer_r=10 -->
+  <!-- Blade 1 – pointing up -->
+  <path d="M 30 42.5 A 4 4 0 0 1 34 42.5 L 37 37.3 A 10 10 0 0 0 27 37.3 Z" fill="#FFD600"/>
+  <!-- Blade 2 – lower-right -->
+  <path d="M 36 46 A 4 4 0 0 1 34 49.5 L 37 54.7 A 10 10 0 0 0 42 46 Z" fill="#FFD600"/>
+  <!-- Blade 3 – lower-left -->
+  <path d="M 30 49.5 A 4 4 0 0 1 28 46 L 22 46 A 10 10 0 0 0 27 54.7 Z" fill="#FFD600"/>
+  <!-- Center circle -->
+  <circle cx="32" cy="46" r="3.5" fill="#FFD600"/>
+</svg>

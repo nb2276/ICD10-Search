@@ -63,12 +63,16 @@
           </div>
 
           <!-- OAR selector -->
-          <div class="bed-card">
-            <div class="bed-card-header">Select OARs</div>
+          <details class="bed-card rert-oar-picker">
+            <summary class="rert-picker-summary">
+              <span class="rert-picker-title">Select OARs</span>
+              <span class="rert-picker-count" id="oar-count">none selected</span>
+              <span class="rert-picker-chevron">&#9660;</span>
+            </summary>
             <div class="rert-check-list" id="oar-check-list">
               <!-- populated by rert.js -->
             </div>
-          </div>
+          </details>
 
           <!-- OAR list (cards appended here by JS) -->
           <div id="oar-list"></div>

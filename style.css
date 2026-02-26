@@ -922,11 +922,58 @@ nav {
   margin-top: 2px;
 }
 
+/* OAR picker — collapsible details/summary */
+.rert-oar-picker {
+  padding: 0;
+  overflow: hidden;
+}
+
+.rert-picker-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 20px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.rert-picker-summary::-webkit-details-marker { display: none; }
+.rert-picker-summary:focus { outline: none; }
+
+.rert-picker-title {
+  font-size: 13px;
+  font-weight: bold;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.rert-picker-count {
+  font-size: 12px;
+  color: #555;
+  margin-left: auto;
+}
+
+.rert-picker-count.has-selection {
+  color: #4fc3f7;
+}
+
+.rert-picker-chevron {
+  font-size: 11px;
+  color: #555;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+details[open].rert-oar-picker .rert-picker-chevron {
+  transform: rotate(180deg);
+}
+
 .rert-check-list {
   max-height: 260px;
   overflow-y: auto;
-  border: 1px solid #2a2a2a;
-  border-radius: 4px;
+  border-top: 1px solid #2a2a2a;
 }
 
 .rert-check-group-label {

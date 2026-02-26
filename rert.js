@@ -141,6 +141,14 @@ function buildCheckboxList() {
 // Add / remove OAR (driven by checkbox state)
 // ============================================================
 
+function updateOarCount() {
+  const el = $('oar-count');
+  if (!el) return;
+  const n = addedOarIds.length;
+  el.textContent = n === 0 ? 'none selected' : n + ' selected';
+  el.classList.toggle('has-selection', n > 0);
+}
+
 function onCheckboxChange(id, checked) {
   if (checked && !addedOarIds.includes(id)) {
     addedOarIds.push(id);
@@ -151,6 +159,7 @@ function onCheckboxChange(id, checked) {
     $('rert-tbody').appendChild(tr);
     $('dose-' + id).addEventListener('input', updateAll);
     toggleEmptyRow();
+    updateOarCount();
     updateAll();
   } else if (!checked && addedOarIds.includes(id)) {
     addedOarIds.splice(addedOarIds.indexOf(id), 1);
@@ -159,6 +168,7 @@ function onCheckboxChange(id, checked) {
     const row = $('rert-row-' + id);
     if (row) row.remove();
     toggleEmptyRow();
+    updateOarCount();
   }
 }
 

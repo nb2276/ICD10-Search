@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Composite Dose Calculator – Medical Tools</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="favicon-16.png" sizes="16x16" type="image/png">
+    <link rel="apple-touch-icon" href="favicon-180.png">
+  </head>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PP2FRCMYS1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PP2FRCMYS1');
+  </script>
+
+  <body>
+    <nav>
+      <a class="nav-brand" href="index.html">Medical Tools</a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">ICD-10 Search</a>
+        <a href="psa.html" class="nav-link">PSA Calculator</a>
+        <a href="bed.html" class="nav-link">BED Calculator</a>
+        <a href="composite.html" class="nav-link active">Composite Dose</a>
+        <a href="about.html" class="nav-link">About</a>
+      </div>
+    </nav>
+
+    <div class="bed-container">
+      <h3 style="text-align:center;margin-top:16px;margin-bottom:20px;">Composite Dose Calculator</h3>
+
+      <!-- Structure Tolerance -->
+      <div class="bed-card">
+        <div class="bed-card-header">Structure Tolerance</div>
+        <div class="comp-grid">
+          <div class="comp-field">
+            <label for="st-dose">Dose (Gy)</label>
+            <input type="number" id="st-dose" value="45" min="0" step="0.1">
+          </div>
+          <div class="comp-field">
+            <label for="st-fx">Fractions</label>
+            <input type="number" id="st-fx" value="25" min="1" step="1">
+          </div>
+          <div class="comp-field">
+            <label for="st-ab">α/β (Gy)</label>
+            <input type="number" id="st-ab" value="3" min="0.1" step="0.1">
+          </div>
+        </div>
+        <div class="comp-bed-row">
+          <span class="comp-bed-label">Tolerance BED</span>
+          <span class="comp-bed-val" id="st-bed">—</span>
+          <span class="comp-bed-unit">Gy</span>
+        </div>
+      </div>
+
+      <!-- Previous Dose -->
+      <div class="bed-card">
+        <div class="bed-card-header">Previous Dose</div>
+        <div class="comp-grid">
+          <div class="comp-field">
+            <label for="pv-dose">Dose (Gy)</label>
+            <input type="number" id="pv-dose" value="15" min="0" step="0.1">
+          </div>
+          <div class="comp-field">
+            <label for="pv-fx">Fractions</label>
+            <input type="number" id="pv-fx" value="10" min="1" step="1">
+          </div>
+          <div class="comp-field">
+            <label for="pv-tdf">Time Discount Factor</label>
+            <input type="number" id="pv-tdf" value="1" min="0" max="1" step="0.05">
+          </div>
+        </div>
+        <div class="comp-bed-row">
+          <span class="comp-bed-label">Previous BED</span>
+          <span class="comp-bed-val" id="pv-bed">—</span>
+          <span class="comp-bed-unit">Gy</span>
+          <span class="comp-bed-detail" id="pv-bed-detail"></span>
+        </div>
+      </div>
+
+      <!-- Remaining Dose -->
+      <div class="bed-card">
+        <div class="bed-card-header">Remaining Dose</div>
+
+        <div class="comp-remaining-eq" id="rem-eq">—</div>
+
+        <div class="comp-grid" style="max-width:160px;">
+          <div class="comp-field">
+            <label for="rem-fx">Fractions</label>
+            <input type="number" id="rem-fx" value="10" min="1" step="1">
+          </div>
+        </div>
+
+        <div id="rem-result"></div>
+      </div>
+
+    </div>
+
+    <script src="composite.js"></script>
+  </body>
+</html>

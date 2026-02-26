@@ -336,3 +336,326 @@ nav {
 .about-card ul li {
   margin-bottom: 10px;
 }
+
+/* -----------------------------------------------------------------------
+   BED Calculator & Composite Dose pages — shared container/card
+----------------------------------------------------------------------- */
+.bed-container {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 20px 24px 48px;
+}
+
+.bed-card {
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+
+.bed-card-header {
+  font-size: 13px;
+  font-weight: bold;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin: 0 0 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #2e2e2e;
+}
+
+.bed-inputs {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  align-items: flex-end;
+}
+
+.bed-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.bed-input-group label {
+  font-size: 11px;
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.bed-num-input {
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 7px 10px;
+  font-size: 15px;
+  width: 90px;
+}
+
+.bed-num-input:focus {
+  outline: none;
+  border-color: #4fc3f7;
+}
+
+.dpf-label {
+  font-size: 13px;
+  color: #555;
+  padding-bottom: 9px;
+  align-self: flex-end;
+}
+
+.dpf-label span {
+  color: #888;
+}
+
+.bed-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bed-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 420px;
+}
+
+.bed-table th {
+  padding: 8px 14px;
+  text-align: center;
+  border-bottom: 1px solid #333;
+  font-weight: normal;
+}
+
+.bed-table th:first-child,
+.bed-table td:first-child {
+  text-align: left;
+}
+
+.bed-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid #252525;
+  text-align: center;
+}
+
+.bed-table tr:last-child td {
+  border-bottom: none;
+}
+
+.bed-row-label {
+  font-size: 12px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.bed-result-cell {
+  color: #4fc3f7;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.ab-th-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.ab-tissue-name {
+  font-size: 13px;
+  color: #ccc;
+}
+
+.ab-edit-row {
+  font-size: 11px;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.ab-input {
+  background-color: #1a1a1a;
+  color: #f0f0f0;
+  border: 1px solid #444;
+  border-radius: 3px;
+  padding: 2px 4px;
+  font-size: 12px;
+  width: 38px;
+  text-align: center;
+}
+
+.ab-input:focus {
+  outline: none;
+  border-color: #4fc3f7;
+}
+
+.alt-fx-input {
+  background-color: #1a1a1a;
+  color: #f0f0f0;
+  border: 1px solid #444;
+  border-radius: 3px;
+  padding: 4px 6px;
+  font-size: 13px;
+  width: 48px;
+  text-align: center;
+}
+
+.alt-fx-input:focus {
+  outline: none;
+  border-color: #4fc3f7;
+}
+
+.bed-section-hint {
+  font-size: 12px;
+  color: #555;
+  margin: -10px 0 16px;
+  line-height: 1.5;
+}
+
+/* -----------------------------------------------------------------------
+   Composite Dose page
+----------------------------------------------------------------------- */
+.comp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.comp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.comp-field label {
+  font-size: 11px;
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.comp-field input {
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 7px 10px;
+  font-size: 15px;
+  width: 100%;
+}
+
+.comp-field input:focus {
+  outline: none;
+  border-color: #4fc3f7;
+}
+
+.comp-bed-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #2a2a2a;
+}
+
+.comp-bed-label {
+  font-size: 11px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.comp-bed-val {
+  font-size: 22px;
+  font-weight: bold;
+  color: #4fc3f7;
+}
+
+.comp-bed-unit {
+  font-size: 13px;
+  color: #666;
+}
+
+.comp-bed-detail {
+  font-size: 13px;
+  color: #666;
+  margin-left: 4px;
+}
+
+.comp-remaining-eq {
+  font-size: 13px;
+  color: #888;
+  line-height: 1.9;
+  margin-bottom: 16px;
+}
+
+.comp-remaining-eq strong {
+  color: #ccc;
+}
+
+.comp-remaining-eq .eq-result {
+  color: #4fc3f7;
+  font-weight: bold;
+}
+
+.comp-remaining-eq .eq-warning {
+  color: #ff8a80;
+  font-weight: bold;
+}
+
+.comp-dose-box {
+  background-color: #0c2030;
+  border: 1px solid #1b4060;
+  border-radius: 6px;
+  padding: 14px 20px;
+}
+
+.comp-dose-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.comp-dose-label {
+  font-size: 12px;
+  color: #4b8aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.comp-dose-val {
+  font-size: 28px;
+  font-weight: bold;
+  color: #4fc3f7;
+}
+
+.comp-dose-unit {
+  font-size: 14px;
+  color: #4b8aaa;
+}
+
+.comp-dose-sub {
+  font-size: 13px;
+  color: #4b8aaa;
+  margin-top: 5px;
+}
+
+.comp-dose-sub span {
+  color: #7ec8e3;
+}
+
+.comp-error-box {
+  background-color: #2e0f0f;
+  border: 1px solid #5c1a1a;
+  border-radius: 6px;
+  padding: 12px 18px;
+  color: #ff8a80;
+  font-size: 14px;
+}

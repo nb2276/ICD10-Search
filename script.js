@@ -96,7 +96,19 @@ function performSearch(){
       const row = codesTable.insertRow(-1);
       const codeCell = row.insertCell(0);
       const diagnosisCell = row.insertCell(1);
-      codeCell.innerHTML = code;
+      codeCell.textContent = code;
+      codeCell.className = 'code-cell';
+      codeCell.title = 'Click to copy';
+      codeCell.addEventListener('click', function () {
+        navigator.clipboard.writeText(code).then(function () {
+          codeCell.textContent = '✓ Copied';
+          codeCell.classList.add('code-cell-copied');
+          setTimeout(function () {
+            codeCell.textContent = code;
+            codeCell.classList.remove('code-cell-copied');
+          }, 1200);
+        });
+      });
       diagnosisCell.innerHTML = diagnosis;
     }
   }

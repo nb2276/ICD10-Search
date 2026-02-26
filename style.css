@@ -132,6 +132,21 @@ nav {
   background-color: #2a2a2a;
 }
 
+.code-cell {
+  cursor: pointer;
+  color: #4fc3f7;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.code-cell:hover {
+  text-decoration: underline;
+}
+
+.code-cell-copied {
+  color: #81c784;
+}
+
 /* -----------------------------------------------------------------------
    PSA Calculator page
 ----------------------------------------------------------------------- */

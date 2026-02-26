@@ -35,8 +35,8 @@ const OAR_DATA = [
   { id: 'stomach',     name: 'Stomach',                        group: 'serial',   constraint: 54,   trf: [0, 0,   0.25, 0.4]  },
   { id: 'trachea',     name: 'Trachea',                        group: 'serial',   constraint: 70,   trf: [0, 0.1, 0.25, 0.5]  },
   // ---- Parallel ----
-  { id: 'lungs',       name: 'Lungs-GTV / Lungs-ITV',          group: 'parallel', constraint: null, constraintText: 'CV16 EQD2 ≥ 1000 cc', trf: [0, 0, 0.25, 0.5] },
-  { id: 'liver',       name: 'Liver',                          group: 'parallel', constraint: null, constraintText: 'CV32 EQD2 ≥ 700 cc',  trf: [0, 0, 0.5,  1]   },
+  { id: 'lungs',  name: 'Lungs-GTV / Lungs-ITV', group: 'parallel', constraint: 16, constraintText: 'V16 EQD2 (cc) ≥ 1000', doseLabel: 'Prior V16 dose (Gy)', trf: [0, 0, 0.25, 0.5] },
+  { id: 'liver',  name: 'Liver',                group: 'parallel', constraint: 32, constraintText: 'V32 EQD2 (cc) ≥ 700',  doseLabel: 'Prior V32 dose (Gy)', trf: [0, 0, 0.5,  1]   },
 ];
 
 const oarById    = Object.fromEntries(OAR_DATA.map(o => [o.id, o]));
@@ -189,9 +189,7 @@ function buildOarCard(oar) {
   const labels  = oar.group === 'serial' ? SERIAL_LABELS : PARALLEL_LABELS;
   const trfVals = oar.group === 'serial' ? [...oar.trf, 0.5] : [...oar.trf];
 
-  const constraintLabel = oar.constraint !== null
-    ? oar.constraint + ' Gy EQD2'
-    : oar.constraintText;
+  const constraintLabel = oar.constraintText || (oar.constraint + ' Gy EQD2');
 
   const chips = labels.map((lbl, i) =>
     '<div class="rert-trf-chip" id="trf-chip-' + oar.id + '-' + i + '">' +
@@ -210,7 +208,7 @@ function buildOarCard(oar) {
       '<button class="rert-remove-btn" onclick="removeOar(\'' + oar.id + '\')" title="Remove">&times;</button>' +
     '</div>' +
     '<div class="rert-oar-dose-row">' +
-      '<label>Prior Dose (Gy)</label>' +
+      '<label>' + (oar.doseLabel || 'Prior Dose (Gy)') + '</label>' +
       '<input type="number" class="bed-num-input rert-dose-input"' +
              ' id="dose-' + oar.id + '" placeholder="0.0" min="0" step="0.1">' +
       '<span class="rert-eqd2-display" id="eqd2disp-' + oar.id + '"></span>' +
@@ -300,8 +298,9 @@ function updateAll() {
         '<td class="rert-report">—</td>',
       ];
     } else if (exceeded) {
+      const sub = oar.constraintText || ('\u2264 ' + oar.constraint + ' Gy EQD2');
       nameHtml  = '<td class="bed-row-label">' + oar.name +
-                  '<span class="rert-oar-subtext">\u2264 ' + oar.constraint + ' Gy EQD2</span></td>';
+                  '<span class="rert-oar-subtext">' + sub + '</span></td>';
       dataCells = [
         '<td class="rert-exceeded" title="Prior dose exceeds or meets constraint">' +
           fmt(remEqd2) + ' \u26a0</td>',
@@ -315,8 +314,9 @@ function updateAll() {
       const d3 = remEqd2 !== null ? eqd2ToPhysical(remEqd2, 3,      prAb) : null;
       const d5 = remEqd2 !== null ? eqd2ToPhysical(remEqd2, 5,      prAb) : null;
       const dN = (remEqd2 !== null && custOk) ? eqd2ToPhysical(remEqd2, custFx, prAb) : null;
+      const sub = oar.constraintText || ('\u2264 ' + oar.constraint + ' Gy EQD2');
       nameHtml  = '<td class="bed-row-label">' + oar.name +
-                  '<span class="rert-oar-subtext">\u2264 ' + oar.constraint + ' Gy EQD2</span></td>';
+                  '<span class="rert-oar-subtext">' + sub + '</span></td>';
       dataCells = [
         '<td class="bed-result-cell">' + fmt(remEqd2) + '</td>',
         '<td class="bed-result-cell">' + fmt(d1) + '</td>',

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Reirradiation Calculator – Medical Tools</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="favicon-16.png" sizes="16x16" type="image/png">
+    <link rel="apple-touch-icon" href="favicon-180.png">
+  </head>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PP2FRCMYS1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PP2FRCMYS1');
+  </script>
+
+  <body>
+    <nav>
+      <a class="nav-brand" href="index.html">Medical Tools</a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">ICD-10 Search</a>
+        <a href="psa.html" class="nav-link">PSA Calculator</a>
+        <a href="bed.html" class="nav-link">BED Calculator</a>
+        <a href="composite.html" class="nav-link">Composite Dose</a>
+        <a href="rert.html" class="nav-link active">Reirradiation</a>
+        <a href="about.html" class="nav-link">About</a>
+      </div>
+    </nav>
+
+    <div class="rert-container">
+      <h3 style="text-align:center;margin-top:16px;margin-bottom:20px;">Reirradiation Dose Calculator</h3>
+
+      <div class="rert-layout">
+
+        <!-- ======================================================
+             LEFT COLUMN – inputs
+        ====================================================== -->
+        <div class="rert-left">
+
+          <!-- Prior plan parameters -->
+          <div class="bed-card">
+            <div class="bed-card-header">Prior Treatment</div>
+            <div class="rert-plan-inputs">
+              <div class="bed-input-group">
+                <label for="pr-fx">Fractions</label>
+                <input class="bed-num-input" type="number" id="pr-fx" value="25" min="1" step="1">
+              </div>
+              <div class="bed-input-group">
+                <label for="pr-ab">α/β (Gy)</label>
+                <input class="bed-num-input" type="number" id="pr-ab" value="2.5" min="0.1" step="0.1">
+              </div>
+              <div class="bed-input-group">
+                <label for="pr-mo">Months since prior RT</label>
+                <input class="bed-num-input" type="number" id="pr-mo" value="12" min="0" step="1" style="width:100px;">
+              </div>
+            </div>
+            <div class="rert-time-label" id="time-label">Active TRF column: <span>—</span></div>
+          </div>
+
+          <!-- OAR selector -->
+          <div class="bed-card">
+            <div class="bed-card-header">Select OARs</div>
+            <div class="rert-selector-row">
+              <select id="oar-select" class="rert-select">
+                <!-- populated by rert.js -->
+              </select>
+              <button class="rert-add-btn" onclick="addOar()">Add OAR</button>
+            </div>
+          </div>
+
+          <!-- OAR list (cards appended here by JS) -->
+          <div id="oar-list"></div>
+
+        </div><!-- end .rert-left -->
+
+        <!-- ======================================================
+             RIGHT COLUMN – results
+        ====================================================== -->
+        <div class="rert-right">
+          <div class="bed-card">
+            <div class="bed-card-header">Remaining Dose Constraints</div>
+            <p class="bed-section-hint">
+              Remaining EQD2 = constraint &minus; prior EQD2 &times; (1&nbsp;&minus;&nbsp;TRF).
+              Physical dose columns (Gy) convert remaining EQD2 using the prior plan α/β.
+            </p>
+            <div class="bed-table-wrap">
+              <table class="bed-table rert-results-table">
+                <thead>
+                  <tr>
+                    <th class="rert-th-oar">OAR</th>
+                    <th>Rem. EQD2<br><span class="rert-col-sub">(Gy)</span></th>
+                    <th>1 fx<br><span class="rert-col-sub">(Gy)</span></th>
+                    <th>3 fx<br><span class="rert-col-sub">(Gy)</span></th>
+                    <th>5 fx<br><span class="rert-col-sub">(Gy)</span></th>
+                    <th>
+                      <input type="number" id="custom-fx" class="alt-fx-input"
+                             value="3" min="1" step="1"
+                             title="Custom fraction count"> fx
+                      <br><span class="rert-col-sub">(Gy)</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="rert-tbody">
+                  <tr id="rert-empty-row">
+                    <td colspan="6" class="rert-empty-msg">
+                      Add OARs from the left panel and enter prior doses to see results.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div><!-- end .rert-right -->
+
+      </div><!-- end .rert-layout -->
+    </div><!-- end .rert-container -->
+
+    <script src="rert.js"></script>
+  </body>
+</html>

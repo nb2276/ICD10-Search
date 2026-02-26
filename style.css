@@ -659,3 +659,265 @@ nav {
   color: #ff8a80;
   font-size: 14px;
 }
+
+/* -----------------------------------------------------------------------
+   Reirradiation Calculator page
+----------------------------------------------------------------------- */
+.rert-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px 24px 48px;
+}
+
+.rert-layout {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.rert-left {
+  flex: 0 0 calc(50% - 10px);
+  min-width: 340px;
+}
+
+.rert-right {
+  flex: 1;
+  min-width: 0;
+  position: sticky;
+  top: 66px;
+}
+
+@media (max-width: 960px) {
+  .rert-layout { flex-direction: column; }
+  .rert-left { flex: none; width: 100%; }
+  .rert-right { position: static; }
+}
+
+.rert-plan-inputs {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.rert-time-label {
+  font-size: 12px;
+  color: #555;
+  margin-top: 4px;
+}
+
+.rert-time-label span {
+  color: #4fc3f7;
+}
+
+.rert-selector-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.rert-select {
+  flex: 1;
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 7px 10px;
+  font-size: 14px;
+}
+
+.rert-select:focus {
+  outline: none;
+  border-color: #4fc3f7;
+}
+
+.rert-add-btn {
+  padding: 7px 18px;
+  background-color: #4fc3f7;
+  color: #1a1a1a;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s;
+}
+
+.rert-add-btn:hover {
+  background-color: #81d4fa;
+}
+
+.rert-oar-card {
+  margin-bottom: 10px;
+  padding: 13px 16px;
+}
+
+.rert-oar-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.rert-oar-name {
+  font-weight: bold;
+  font-size: 14px;
+  color: #e0e0e0;
+  flex: 1;
+  min-width: 0;
+}
+
+.rert-constraint-badge {
+  font-size: 11px;
+  color: #4fc3f7;
+  background-color: #0b1e2e;
+  border: 1px solid #1b4060;
+  border-radius: 3px;
+  padding: 2px 7px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.rert-remove-btn {
+  background: none;
+  border: 1px solid #3a3a3a;
+  color: #555;
+  border-radius: 3px;
+  padding: 1px 7px;
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1.2;
+  flex-shrink: 0;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.rert-remove-btn:hover {
+  color: #ff8a80;
+  border-color: #ff8a80;
+}
+
+.rert-oar-dose-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.rert-oar-dose-row label {
+  font-size: 11px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+}
+
+.rert-dose-input {
+  width: 80px !important;
+}
+
+.rert-eqd2-display {
+  font-size: 12px;
+  color: #4fc3f7;
+  min-height: 16px;
+}
+
+.rert-trf-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.rert-trf-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #222;
+  border: 1px solid #2e2e2e;
+  border-radius: 4px;
+  padding: 4px 8px;
+  min-width: 52px;
+  transition: background-color 0.1s, border-color 0.1s;
+}
+
+.rert-trf-chip.active {
+  background-color: #0b1e2e;
+  border-color: #4fc3f7;
+}
+
+.rert-trf-val {
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+  transition: color 0.1s;
+}
+
+.rert-trf-chip.active .rert-trf-val {
+  color: #4fc3f7;
+}
+
+.rert-trf-lbl {
+  font-size: 9px;
+  color: #444;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  margin-top: 2px;
+  transition: color 0.1s;
+}
+
+.rert-trf-chip.active .rert-trf-lbl {
+  color: #4b8aaa;
+}
+
+/* Results table */
+.rert-results-table {
+  min-width: 480px;
+}
+
+.rert-results-table .rert-th-oar {
+  text-align: left;
+  min-width: 130px;
+}
+
+.rert-col-sub {
+  font-size: 10px;
+  color: #555;
+  font-weight: normal;
+}
+
+.rert-exceeded {
+  color: #ff8a80;
+  font-size: 14px;
+  text-align: center;
+}
+
+.rert-report {
+  color: #555;
+  font-size: 13px;
+  text-align: center;
+}
+
+.rert-empty-msg {
+  color: #444;
+  text-align: center;
+  padding: 28px 16px;
+  font-size: 14px;
+}
+
+.rert-report-only-note {
+  display: block;
+  font-size: 9px;
+  color: #4b4b4b;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-top: 2px;
+}
+
+.rert-oar-subtext {
+  display: block;
+  font-size: 10px;
+  color: #555;
+  font-weight: normal;
+  margin-top: 2px;
+}

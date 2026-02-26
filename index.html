@@ -32,29 +32,33 @@
       </div>
     </nav>
 
-    <h3 style="text-align:center;margin-top:16px;">ICD-10 Code Search</h3>
-    <div style="display:flex;justify-content:center;">
-      <input type="text" id="searchTerm">
-    </div>
-    <div class="checkbox-container">
-      <input type="radio" name="type" id="all">
-      <label for="all" style="margin-right: 2px;">All</label>
-      <input type="radio" name="type" id="selectMalignant" checked>
-      <label for="selectMalignant" style="margin-right: 2px;">Malignancy</label>
-      <input type="radio" name="type" id="selectInSitu">
-      <label for="selectInSitu" style="margin-right: 2px;">In Situ</label>
-      <input type="radio" name="type" id="selectBenign">
-      <label for="selectBenign" style="margin-right: 2px;">Benign Neoplasm</label>
-      <input type="radio" name="type" id="selectZ">
-      <label for="selectZ" style="margin-right: 2px;">Z Code</label>
-    </div>
-    <div id="results">
-      <table id="codesTable">
-        <tr>
-          <th>Code</th>
-          <th>Diagnosis</th>
-        </tr>
-      </table>
+    <div class="bed-container">
+      <h3 style="text-align:center;margin-top:16px;margin-bottom:20px;">ICD-10 Code Search</h3>
+
+      <div class="bed-card">
+        <input type="text" id="searchTerm" placeholder="Search diagnoses…" autocomplete="off">
+        <div class="checkbox-container">
+          <input type="radio" name="type" id="all">
+          <label for="all">All</label>
+          <input type="radio" name="type" id="selectMalignant" checked>
+          <label for="selectMalignant">Malignancy</label>
+          <input type="radio" name="type" id="selectInSitu">
+          <label for="selectInSitu">In Situ</label>
+          <input type="radio" name="type" id="selectBenign">
+          <label for="selectBenign">Benign Neoplasm</label>
+          <input type="radio" name="type" id="selectZ">
+          <label for="selectZ">Z Code</label>
+        </div>
+      </div>
+
+      <div id="results">
+        <table id="codesTable">
+          <tr>
+            <th>Code</th>
+            <th>Diagnosis</th>
+          </tr>
+        </table>
+      </div>
     </div>
     <script src="script.js"></script>
   </body>

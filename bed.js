@@ -61,10 +61,12 @@ function update() {
     const a = ab[i];
     const goodBed = b !== null && !isNaN(a) && a > 0;
 
-    document.getElementById('alt5-' + (i + 1)).textContent =
-      goodBed ? fmt(isoeffDose(b, 5, a)) + ' Gy' : '—';
     document.getElementById('alt1-' + (i + 1)).textContent =
       goodBed ? fmt(isoeffDose(b, 1, a)) + ' Gy' : '—';
+    document.getElementById('alt3-' + (i + 1)).textContent =
+      goodBed ? fmt(isoeffDose(b, 3, a)) + ' Gy' : '—';
+    document.getElementById('alt5-' + (i + 1)).textContent =
+      goodBed ? fmt(isoeffDose(b, 5, a)) + ' Gy' : '—';
     document.getElementById('altA-' + (i + 1)).textContent =
       (goodBed && arbOk) ? fmt(isoeffDose(b, arbFx, a)) + ' Gy' : '—';
   }

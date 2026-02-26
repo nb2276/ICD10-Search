@@ -921,3 +921,55 @@ nav {
   font-weight: normal;
   margin-top: 2px;
 }
+
+.rert-check-list {
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid #2a2a2a;
+  border-radius: 4px;
+}
+
+.rert-check-group-label {
+  display: block;
+  font-size: 10px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 8px 12px 4px;
+  background-color: #1a1a1a;
+  position: sticky;
+  top: 0;
+}
+
+.rert-check-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 5px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #bbb;
+  transition: background-color 0.1s;
+  user-select: none;
+}
+
+.rert-check-item:hover {
+  background-color: #222;
+}
+
+.rert-check-item input[type="checkbox"] {
+  accent-color: #4fc3f7;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* Attribution footnote (BED / Composite pages) */
+.bed-attribution {
+  font-size: 11px;
+  color: #3a3a3a;
+  text-align: center;
+  margin-top: 4px;
+  padding-bottom: 8px;
+}

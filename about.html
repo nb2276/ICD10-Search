@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>About – Medical Tools</title>
+    <title>About – Oncology Toolkit</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
@@ -20,10 +20,10 @@
   </script>
   <body>
     <nav>
-      <a class="nav-brand" href="index.html">Medical Tools</a>
+      <a class="nav-brand" href="index.html">Oncology Toolkit</a>
       <div class="nav-links">
         <a href="index.html" class="nav-link">ICD-10 Search</a>
-        <a href="psa.html" class="nav-link">PSA Calculator</a>
+        <a href="psa.html" class="nav-link">PSA Doubling Time</a>
         <a href="bed.html" class="nav-link">BED Calculator</a>
         <a href="composite.html" class="nav-link">Composite Dose</a>
         <a href="rert.html" class="nav-link">Reirradiation</a>
@@ -61,16 +61,27 @@
           <li>
             <strong>BED / EQD2 Calculator</strong> &mdash; Computes Biologically Effective
             Dose and Equivalent Dose in 2 Gy fractions for a given prescription across
-            configurable &alpha;/&beta; tissue values. An alternative fractionation section
-            converts the same BED to isoeffective total doses for 5-fraction, single-fraction,
-            and any arbitrary fractionation scheme.
+            configurable &alpha;/&beta; tissue values (Tumor, Late, Prostate/Spine). An
+            alternative fractionation section converts the same BED to isoeffective total
+            doses for 1, 3, 5, and any arbitrary number of fractions. Based on a spreadsheet
+            by Dr. Mike Wahl.
           </li>
           <li>
             <strong>Composite Dose Calculator</strong> &mdash; Estimates the remaining
             tolerable dose to a previously irradiated structure. Takes structure tolerance
             dose/fractions/&alpha;&beta;, a prior dose with optional time discount factor,
             and a planned fraction count to compute the remaining safe dose and dose per
-            fraction.
+            fraction. Based on a spreadsheet by Dr. Mike Wahl.
+          </li>
+          <li>
+            <strong>Reirradiation Dose Calculator</strong> &mdash; Estimates remaining
+            organ-at-risk dose tolerance for reirradiation cases using UMich ReRT guidelines.
+            Accepts prior plan fractionation, &alpha;/&beta;, and time since prior RT.
+            OARs are selected from a checklist of 24 serial and parallel structures;
+            each displays the prior physical dose converted to EQD2, tissue recovery factor
+            (TRF) columns for all documented time intervals with the active bucket highlighted,
+            and a results table showing remaining EQD2 and isoeffective physical doses
+            for 1, 3, 5, and a custom number of fractions — all updating in real time.
           </li>
         </ul>
       </div>

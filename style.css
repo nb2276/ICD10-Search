@@ -381,6 +381,15 @@ nav {
   margin-bottom: 10px;
 }
 
+.about-email {
+  color: #4fc3f7;
+  text-decoration: none;
+}
+
+.about-email:hover {
+  text-decoration: underline;
+}
+
 .feedback-field {
   margin-bottom: 12px;
 }

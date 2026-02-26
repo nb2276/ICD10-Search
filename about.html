@@ -88,61 +88,10 @@
         <hr class="about-divider">
 
         <h3>Feedback</h3>
-        <p>Have a suggestion or found an error? Leave a note below.</p>
-
-        <!--
-          SETUP: Go to https://formspree.io, create a free account,
-          register this page, and replace YOUR_FORM_ID in the action URL below.
-        -->
-        <form id="feedbackForm"
-              action="https://formspree.io/f/YOUR_FORM_ID"
-              method="POST">
-          <div class="feedback-field">
-            <textarea name="message" id="fb-message" rows="4"
-                      placeholder="Your message…" required></textarea>
-          </div>
-          <div class="feedback-field">
-            <input type="email" name="email" id="fb-email"
-                   placeholder="Your email (optional — for replies)">
-          </div>
-          <button type="submit" class="calc-button" id="fb-submit">Send Feedback</button>
-          <div id="fb-status"></div>
-        </form>
-
-        <script>
-          (function () {
-            const form   = document.getElementById('feedbackForm');
-            const btn    = document.getElementById('fb-submit');
-            const status = document.getElementById('fb-status');
-            form.addEventListener('submit', async function (e) {
-              e.preventDefault();
-              btn.disabled    = true;
-              btn.textContent = 'Sending…';
-              status.textContent = '';
-              status.className   = '';
-              try {
-                const resp = await fetch(form.action, {
-                  method:  'POST',
-                  body:    new FormData(form),
-                  headers: { 'Accept': 'application/json' }
-                });
-                if (resp.ok) {
-                  form.reset();
-                  status.textContent = 'Message sent — thank you!';
-                  status.className   = 'fb-success';
-                } else {
-                  status.textContent = 'Could not send. Please try again.';
-                  status.className   = 'fb-error';
-                }
-              } catch {
-                status.textContent = 'Network error. Please try again.';
-                status.className   = 'fb-error';
-              }
-              btn.disabled    = false;
-              btn.textContent = 'Send Feedback';
-            });
-          })();
-        </script>
+        <p>
+          Have a suggestion or found an error? Send feedback to
+          <a href="mailto:feedback@oncologytoolkit.com" class="about-email">feedback@oncologytoolkit.com</a>.
+        </p>
 
       </div>
     </div>

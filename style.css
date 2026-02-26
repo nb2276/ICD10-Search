@@ -113,9 +113,30 @@ nav {
    PSA Calculator page
 ----------------------------------------------------------------------- */
 .psa-container {
-  max-width: 920px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 20px 24px 40px;
+}
+
+.psa-layout {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+.psa-col-left {
+  flex: 0 0 320px;
+  min-width: 260px;
+}
+
+.psa-col-right {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 780px) {
+  .psa-layout { flex-direction: column; }
+  .psa-col-left { flex: none; width: 100%; }
 }
 
 .input-section {

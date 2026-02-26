@@ -35,8 +35,8 @@ const OAR_DATA = [
   { id: 'stomach',     name: 'Stomach',                        group: 'serial',   constraint: 54,   trf: [0, 0,   0.25, 0.4]  },
   { id: 'trachea',     name: 'Trachea',                        group: 'serial',   constraint: 70,   trf: [0, 0.1, 0.25, 0.5]  },
   // ---- Parallel ----
-  { id: 'lungs',  name: 'Lungs-GTV / Lungs-ITV', group: 'parallel', constraint: 16, constraintText: 'V16 EQD2 (cc) ≥ 1000', doseLabel: 'Prior V16 dose (Gy)', trf: [0, 0, 0.25, 0.5] },
-  { id: 'liver',  name: 'Liver',                group: 'parallel', constraint: 32, constraintText: 'V32 EQD2 (cc) ≥ 700',  doseLabel: 'Prior V32 dose (Gy)', trf: [0, 0, 0.5,  1]   },
+  { id: 'lungs',  name: 'Lungs-GTV / Lungs-ITV', group: 'parallel', constraint: null, unit: 'cc', constraintCc: 1000, constraintText: 'V16 EQD2 (cc) ≥ 1000', doseLabel: 'Prior V16 volume (cc)', trf: [0, 0, 0.25, 0.5] },
+  { id: 'liver',  name: 'Liver',                group: 'parallel', constraint: null, unit: 'cc', constraintCc: 700,  constraintText: 'V32 EQD2 (cc) ≥ 700',  doseLabel: 'Prior V32 volume (cc)', trf: [0, 0, 0.5,  1]   },
 ];
 
 const oarById    = Object.fromEntries(OAR_DATA.map(o => [o.id, o]));
@@ -258,6 +258,49 @@ function updateAll() {
     for (let i = 0; i < numChips; i++) {
       const chip = $('trf-chip-' + id + '-' + i);
       if (chip) chip.classList.toggle('active', i === activeIdx);
+    }
+
+    // CC-based volumetric OARs (Lungs, Liver)
+    if (oar.unit === 'cc') {
+      const trfCc = timeValid ? getActiveTrf(oar, prMo) : 0;
+      let effVol = null;
+      let remCc  = null;
+      if (hasDose) {
+        effVol = dose * (1 - trfCc);
+        $('eqd2disp-' + id).textContent = '\u2192 effective: ' + effVol.toFixed(1) + ' cc';
+        remCc = oar.constraintCc - effVol;
+      } else {
+        $('eqd2disp-' + id).textContent = '';
+      }
+      const row = $('rert-row-' + id);
+      if (!row) return;
+      const sub = oar.constraintText;
+      const exceeded = remCc !== null && remCc <= 0;
+      let nameHtml, dataCells;
+      if (exceeded) {
+        nameHtml  = '<td class="bed-row-label">' + oar.name +
+                    '<span class="rert-oar-subtext">' + sub + '</span></td>';
+        dataCells = [
+          '<td class="rert-exceeded" title="Volume constraint exceeded">' +
+            remCc.toFixed(1) + ' cc \u26a0</td>',
+          '<td class="rert-exceeded">—</td>',
+          '<td class="rert-exceeded">—</td>',
+          '<td class="rert-exceeded">—</td>',
+          '<td class="rert-exceeded">—</td>',
+        ];
+      } else {
+        nameHtml  = '<td class="bed-row-label">' + oar.name +
+                    '<span class="rert-oar-subtext">' + sub + '</span></td>';
+        dataCells = [
+          '<td class="bed-result-cell">' + (remCc !== null ? remCc.toFixed(1) + ' cc' : '—') + '</td>',
+          '<td class="rert-report">—</td>',
+          '<td class="rert-report">—</td>',
+          '<td class="rert-report">—</td>',
+          '<td class="rert-report">—</td>',
+        ];
+      }
+      row.innerHTML = nameHtml + dataCells.join('');
+      return;
     }
 
     // EQD2 of prior dose

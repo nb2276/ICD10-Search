@@ -303,8 +303,9 @@ function calculate() {
   const text = document.getElementById('psaInput').value;
   const data = parseInput(text);
 
-  const errEl = document.getElementById('psaError');
-  const resEl = document.getElementById('psaResults');
+  const errEl        = document.getElementById('psaError');
+  const resEl        = document.getElementById('psaResults');
+  const parsedSecEl  = document.getElementById('parsedSection');
 
   if (data.length < 2) {
     errEl.textContent = data.length === 0
@@ -312,6 +313,7 @@ function calculate() {
       : 'At least 2 measurements are required to calculate a doubling time.';
     errEl.style.display = 'block';
     resEl.style.display = 'none';
+    parsedSecEl.style.display = 'none';
     return;
   }
 
@@ -322,6 +324,7 @@ function calculate() {
     errEl.textContent = 'Could not fit the data. Ensure all PSA values are positive numbers.';
     errEl.style.display = 'block';
     resEl.style.display = 'none';
+    parsedSecEl.style.display = 'none';
     return;
   }
 
@@ -330,6 +333,7 @@ function calculate() {
 
   updateParsedTable(data);
   resEl.style.display = 'block';
+  parsedSecEl.style.display = 'block';
   renderChart(data, fit);
 }
 

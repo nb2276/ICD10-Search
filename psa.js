@@ -398,7 +398,7 @@ function updateParsedTable(data) {
   for (const { date, psaValue } of data) {
     const row = table.insertRow(-1);
     row.insertCell(0).textContent = fmtDate(date);
-    row.insertCell(1).textContent = psaValue.toFixed(3);
+    row.insertCell(1).textContent = psaValue.toFixed(2);
   }
 }
 

@@ -262,6 +262,17 @@ nav {
   margin-bottom: 6px;
 }
 
+.psa-field-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #777;
+  margin-bottom: 4px;
+  margin-top: 10px;
+}
+
 .help-text {
   font-size: 12px;
   color: #777;

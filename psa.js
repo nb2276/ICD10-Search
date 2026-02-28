@@ -397,8 +397,8 @@ function updateParsedTable(data) {
   while (table.rows.length > 1) table.deleteRow(-1);
   for (const { date, psaValue } of data) {
     const row = table.insertRow(-1);
-    row.insertCell(0).textContent = psaValue.toFixed(3);
-    row.insertCell(1).textContent = fmtDate(date);
+    row.insertCell(0).textContent = fmtDate(date);
+    row.insertCell(1).textContent = psaValue.toFixed(3);
   }
 }
 
@@ -438,11 +438,7 @@ function calculate() {
   lastData = data;
   lastFit  = fit;
 
-  // Default projection = 5 × doubling time; fall back to 5 yrs if DT is negative/zero
-  const defaultYrs = fit.doublingTimeDays > 0
-    ? Math.max(1, Math.round(5 * fit.doublingTimeDays / 365.25 * 10) / 10)
-    : 5;
-  document.getElementById('projectionYears').value = defaultYrs;
+  document.getElementById('projectionYears').value = 2;
 
   document.getElementById('doublingTime').textContent = fmtDoublingTime(fit.doublingTimeDays);
   document.getElementById('clickInfo').style.display = 'none';

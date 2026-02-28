@@ -194,8 +194,9 @@ function renderChart(data, fit) {
   const titleColor  = light ? '#444'    : '#777';
 
   const MS_PER_YEAR = 365.25 * MS_PER_DAY;
+  const projYrs     = Math.max(0.5, parseFloat(document.getElementById('projectionYears').value) || 5);
   const chartStart  = new Date(data[0].date);
-  const chartEnd    = new Date(data[data.length - 1].date.getTime() + 5 * MS_PER_YEAR);
+  const chartEnd    = new Date(data[data.length - 1].date.getTime() + projYrs * MS_PER_YEAR);
 
   const curve    = buildCurve(fit, chartStart, chartEnd);
   const measured = data.map(d => ({ x: new Date(d.date), y: d.psaValue }));
@@ -437,6 +438,12 @@ function calculate() {
   lastData = data;
   lastFit  = fit;
 
+  // Default projection = 5 × doubling time; fall back to 5 yrs if DT is negative/zero
+  const defaultYrs = fit.doublingTimeDays > 0
+    ? Math.max(1, Math.round(5 * fit.doublingTimeDays / 365.25 * 10) / 10)
+    : 5;
+  document.getElementById('projectionYears').value = defaultYrs;
+
   document.getElementById('doublingTime').textContent = fmtDoublingTime(fit.doublingTimeDays);
   document.getElementById('clickInfo').style.display = 'none';
 
@@ -453,4 +460,8 @@ document.getElementById('psaInput').addEventListener('keydown', function(e) {
     e.preventDefault();
     calculate();
   }
+});
+
+document.getElementById('projectionYears').addEventListener('input', function () {
+  if (lastData && lastFit) renderChart(lastData, lastFit);
 });

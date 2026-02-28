@@ -352,6 +352,19 @@ nav {
   margin-bottom: 28px;
 }
 
+.chart-projection-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: #999;
+}
+
+.psa-white-mode .chart-projection-row {
+  color: #555;
+}
+
 .chart-hint {
   font-size: 12px;
   color: #666;

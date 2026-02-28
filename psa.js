@@ -152,7 +152,10 @@ function fitExponential(data) {
 // Chart
 // -------------------------------------------------------------------------
 
-let psaChart = null;
+let psaChart  = null;
+let whiteMode = false;
+let lastData  = null;
+let lastFit   = null;
 
 function fmtDate(date) {
   return date.toLocaleDateString('en-US', {
@@ -183,6 +186,13 @@ function buildCurve(fit, startDate, endDate) {
 }
 
 function renderChart(data, fit) {
+  const light       = whiteMode;
+  const bgColor     = light ? '#ffffff' : '#1a1a1a';
+  const gridColor   = light ? '#ddd'    : '#2e2e2e';
+  const tickColor   = light ? '#444'    : '#777';
+  const legendColor = light ? '#333'    : '#bbb';
+  const titleColor  = light ? '#444'    : '#777';
+
   const MS_PER_YEAR = 365.25 * MS_PER_DAY;
   const chartStart  = new Date(data[0].date);
   const chartEnd    = new Date(data[data.length - 1].date.getTime() + 5 * MS_PER_YEAR);
@@ -234,7 +244,7 @@ function renderChart(data, fit) {
           }
         },
         legend: {
-          labels: { color: '#bbb', padding: 16 }
+          labels: { color: legendColor, padding: 16 }
         }
       },
       scales: {
@@ -244,18 +254,28 @@ function renderChart(data, fit) {
             unit: 'month',
             displayFormats: { month: 'MMM yyyy' }
           },
-          ticks: { color: '#777', maxTicksLimit: 10 },
-          grid:  { color: '#2e2e2e' },
-          title: { display: true, text: 'Date', color: '#777' }
+          ticks: { color: tickColor, maxTicksLimit: 10 },
+          grid:  { color: gridColor },
+          title: { display: true, text: 'Date', color: titleColor }
         },
         y: {
-          ticks: { color: '#777' },
-          grid:  { color: '#2e2e2e' },
-          title: { display: true, text: 'PSA (ng/mL)', color: '#777' }
+          ticks: { color: tickColor },
+          grid:  { color: gridColor },
+          title: { display: true, text: 'PSA (ng/mL)', color: titleColor }
         }
       },
       onClick: (evt) => handleChartClick(evt, fit)
-    }
+    },
+    plugins: [{
+      id: 'chartBackground',
+      beforeDraw(chart) {
+        const c2 = chart.canvas.getContext('2d');
+        c2.save();
+        c2.fillStyle = bgColor;
+        c2.fillRect(0, 0, chart.width, chart.height);
+        c2.restore();
+      }
+    }]
   });
 }
 
@@ -282,6 +302,92 @@ function handleChartClick(evt, fit) {
 }
 
 // -------------------------------------------------------------------------
+// White background toggle
+// -------------------------------------------------------------------------
+
+function toggleWhiteMode() {
+  whiteMode = !whiteMode;
+  const btn = document.getElementById('whiteModeBtn');
+  const res = document.getElementById('psaResults');
+  if (whiteMode) {
+    res.classList.add('psa-white-mode');
+    btn.textContent = 'Dark Background';
+  } else {
+    res.classList.remove('psa-white-mode');
+    btn.textContent = 'White Background';
+  }
+  if (lastData && lastFit) renderChart(lastData, lastFit);
+}
+
+// -------------------------------------------------------------------------
+// Copy results as PNG to clipboard
+// -------------------------------------------------------------------------
+
+function copyResults() {
+  if (!lastData || !lastFit) return;
+  const btn         = document.getElementById('copyResultsBtn');
+  const dt          = document.getElementById('doublingTime').textContent;
+  const chartCanvas = document.getElementById('psaChart');
+
+  const pad    = 28;
+  const headH  = 64;
+  const rowH   = 26;
+  const tableH = (lastData.length + 2) * rowH + pad * 2;
+  const W      = chartCanvas.width;
+  const H      = headH + chartCanvas.height + tableH;
+
+  const out = document.createElement('canvas');
+  out.width  = W;
+  out.height = H;
+  const c = out.getContext('2d');
+
+  c.fillStyle = '#ffffff';
+  c.fillRect(0, 0, W, H);
+
+  const fSize = Math.max(14, Math.round(W / 32));
+  c.fillStyle = '#111111';
+  c.font = `bold ${fSize}px system-ui, sans-serif`;
+  c.fillText('PSA Doubling Time: ' + dt, pad, Math.round(headH * 0.65));
+
+  c.drawImage(chartCanvas, 0, headH);
+
+  let y       = headH + chartCanvas.height + pad;
+  const col2x = pad + Math.round(W * 0.22);
+  const tSize = Math.max(12, Math.round(W / 56));
+
+  c.fillStyle = '#1565c0';
+  c.font = `bold ${tSize}px monospace`;
+  c.fillText('PSA (ng/mL)', pad, y);
+  c.fillText('Date', col2x, y);
+  y += 6;
+
+  c.fillStyle = '#cccccc';
+  c.fillRect(pad, y, W - pad * 2, 1);
+  y += rowH - 4;
+
+  c.fillStyle = '#111111';
+  c.font = `${tSize}px monospace`;
+  for (const { date, psaValue } of lastData) {
+    c.fillText(psaValue.toFixed(3), pad, y);
+    c.fillText(fmtDate(date), col2x, y);
+    y += rowH;
+  }
+
+  out.toBlob(function (blob) {
+    navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]).then(function () {
+      const orig = btn.textContent;
+      btn.textContent = '\u2713 Copied!';
+      setTimeout(function () { btn.textContent = orig; }, 1500);
+    }).catch(function () {
+      const a = document.createElement('a');
+      a.href = out.toDataURL();
+      a.download = 'psa-results.png';
+      a.click();
+    });
+  });
+}
+
+// -------------------------------------------------------------------------
 // Parsed data table
 // -------------------------------------------------------------------------
 
@@ -290,8 +396,8 @@ function updateParsedTable(data) {
   while (table.rows.length > 1) table.deleteRow(-1);
   for (const { date, psaValue } of data) {
     const row = table.insertRow(-1);
-    row.insertCell(0).textContent = fmtDate(date);
-    row.insertCell(1).textContent = psaValue.toFixed(3);
+    row.insertCell(0).textContent = psaValue.toFixed(3);
+    row.insertCell(1).textContent = fmtDate(date);
   }
 }
 
@@ -327,6 +433,9 @@ function calculate() {
     parsedSecEl.style.display = 'none';
     return;
   }
+
+  lastData = data;
+  lastFit  = fit;
 
   document.getElementById('doublingTime').textContent = fmtDoublingTime(fit.doublingTimeDays);
   document.getElementById('clickInfo').style.display = 'none';

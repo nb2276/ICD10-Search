@@ -63,8 +63,8 @@
               <h4>Parsed Measurements</h4>
               <table id="parsedTable">
                 <tr>
-                  <th>Date</th>
                   <th>PSA (ng/mL)</th>
+                  <th>Date</th>
                 </tr>
               </table>
             </div>
@@ -76,6 +76,11 @@
           <div id="psaError" class="error-msg" style="display:none;"></div>
 
           <div id="psaResults" style="display:none;">
+            <div class="psa-btn-bar">
+              <button class="psa-action-btn" id="whiteModeBtn" onclick="toggleWhiteMode()">White Background</button>
+              <button class="psa-action-btn" id="copyResultsBtn" onclick="copyResults()">Copy Results</button>
+            </div>
+
             <div class="result-card">
               <div class="result-label">PSA Doubling Time</div>
               <div id="doublingTime" class="result-value"></div>

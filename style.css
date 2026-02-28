@@ -147,6 +147,31 @@ nav {
   color: #81c784;
 }
 
+.diag-copy-btn {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 6px;
+  font-size: 12px;
+  border-radius: 3px;
+  border: 1px solid #444;
+  background: #2a2a2a;
+  color: #666;
+  cursor: pointer;
+  vertical-align: middle;
+  opacity: 0;
+  transition: opacity 0.15s;
+  line-height: 1.4;
+}
+
+#codesTable tr:hover .diag-copy-btn {
+  opacity: 1;
+}
+
+.diag-copy-btn:hover {
+  color: #4fc3f7;
+  border-color: #4fc3f7;
+}
+
 /* -----------------------------------------------------------------------
    PSA Calculator page
 ----------------------------------------------------------------------- */
@@ -170,6 +195,55 @@ nav {
 .psa-col-right {
   flex: 1;
   min-width: 0;
+}
+
+/* White background mode for PSA results */
+.psa-white-mode {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 12px 16px 16px;
+  color: #111;
+}
+
+.psa-white-mode .result-card   { background: #f0f0f0; }
+.psa-white-mode .result-label  { color: #555; }
+.psa-white-mode .result-value  { color: #111; }
+.psa-white-mode .chart-hint    { color: #555; }
+.psa-white-mode .click-info    { color: #333; background: #f5f5f5; border-color: #ddd; }
+
+/* PSA action buttons (white mode toggle, copy) */
+.psa-btn-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.psa-action-btn {
+  padding: 5px 14px;
+  font-size: 13px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background: #2a2a2a;
+  color: #bbb;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  font-family: inherit;
+}
+
+.psa-action-btn:hover {
+  background: #3a3a3a;
+  color: #fff;
+}
+
+.psa-white-mode .psa-action-btn {
+  background: #eee;
+  border-color: #bbb;
+  color: #333;
+}
+
+.psa-white-mode .psa-action-btn:hover {
+  background: #ddd;
+  color: #111;
 }
 
 @media (max-width: 780px) {
@@ -403,6 +477,12 @@ nav {
 
 .about-email:hover {
   text-decoration: underline;
+}
+
+.about-created {
+  color: #888;
+  font-size: 13px;
+  margin-bottom: 20px;
 }
 
 .feedback-field {

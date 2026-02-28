@@ -109,7 +109,17 @@ function performSearch(){
           }, 1200);
         });
       });
-      diagnosisCell.innerHTML = diagnosis;
+      diagnosisCell.innerHTML =
+        '<span class="diag-text">' + diagnosis + '</span>' +
+        '<button class="diag-copy-btn" title="Copy diagnosis">\u29c9</button>';
+      diagnosisCell.querySelector('.diag-copy-btn').addEventListener('click', function (e) {
+        e.stopPropagation();
+        const btn2 = e.currentTarget;
+        navigator.clipboard.writeText(diagnosis).then(function () {
+          btn2.textContent = '\u2713';
+          setTimeout(function () { btn2.textContent = '\u29c9'; }, 1200);
+        });
+      });
     }
   }
 

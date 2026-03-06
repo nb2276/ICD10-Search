@@ -67,7 +67,7 @@ function parseLine(line) {
   line = line.trim();
   if (!line || line.startsWith('#')) return null;
 
-  const tokens = line.split(/[\s,;|]+/).filter(Boolean);
+  const tokens = line.split(/[\s,;:|]+/).filter(Boolean);
 
   let date = null;
   let psaValue = null;

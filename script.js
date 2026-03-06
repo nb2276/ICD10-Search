@@ -38,6 +38,10 @@ const selectInSituchecked = document.getElementById('selectInSitu');
 const selectBenignchecked = document.getElementById('selectBenign');
 const selectZchecked = document.getElementById('selectZ');
 
+document.getElementById('all').addEventListener("change", function() {
+  performSearch();
+});
+
 selectMalignantchecked.addEventListener("change", function() {
   performSearch();
 });

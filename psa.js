@@ -275,6 +275,17 @@ function renderChart(data, fit) {
         c2.fillStyle = bgColor;
         c2.fillRect(0, 0, chart.width, chart.height);
         c2.restore();
+      },
+      afterDraw(chart) {
+        const c2 = chart.canvas.getContext('2d');
+        c2.save();
+        const fontSize = Math.max(10, Math.round(chart.width / 72));
+        c2.font = `${fontSize}px system-ui, sans-serif`;
+        c2.fillStyle = light ? 'rgba(0,0,0,0.18)' : 'rgba(255,255,255,0.18)';
+        c2.textAlign = 'right';
+        c2.textBaseline = 'bottom';
+        c2.fillText('oncologytoolkit.com', chart.width - 10, chart.height - 8);
+        c2.restore();
       }
     }]
   });

@@ -21,6 +21,9 @@ xhr_ICD.onreadystatechange = function() {
       ICD_10_CODES.push([id, desc]);
     }
 
+    // Hide loading indicator
+    const loadingEl = document.getElementById('loadingIndicator');
+    if (loadingEl) loadingEl.style.display = 'none';
   }
 };
 
@@ -81,8 +84,8 @@ function performSearch(){
 
   const words = term.split(" ");
 
-  // Clear the table
-  while (codesTable.rows.length > 0) {
+  // Clear the table (keep header row)
+  while (codesTable.rows.length > 1) {
       codesTable.deleteRow(-1);
   }
 

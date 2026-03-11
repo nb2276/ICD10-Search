@@ -518,7 +518,10 @@ function updateParsedTable(data) {
 // -------------------------------------------------------------------------
 
 function calculate() {
-  const text = document.getElementById('psaInput').value;
+  const input = document.getElementById('psaInput');
+  // Strip blank lines so pasted data with leading/trailing whitespace works
+  input.value = input.value.split('\n').filter(l => l.trim()).join('\n');
+  const text = input.value;
   const data = parseInput(text);
 
   const errEl        = document.getElementById('psaError');

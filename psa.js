@@ -288,6 +288,7 @@ function renderChart(data, fit) {
       backgroundColor: 'rgba(239,83,80,0.08)',
       fill: false,
       pointRadius: 0,
+      pointHitRadius: 10,
       borderWidth: 2.5,
       tension: 0,
       order: 2

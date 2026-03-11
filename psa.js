@@ -333,15 +333,7 @@ function renderChart(data, fit) {
       responsive: true,
       animation: { duration: 400 },
       plugins: {
-        tooltip: {
-          mode: 'nearest',
-          intersect: false,
-          filter: item => item.dataset.label === 'Exponential Fit',
-          callbacks: {
-            title: items => fmtDate(new Date(items[0].parsed.x)),
-            label: item  => `PSA: ${item.parsed.y.toFixed(2)} ng/mL`
-          }
-        },
+        tooltip: { enabled: false },
         legend: {
           labels: {
             color: legendColor,
@@ -367,6 +359,7 @@ function renderChart(data, fit) {
           title: { display: true, text: 'PSA (ng/mL)', color: titleColor }
         }
       },
+      onHover: (evt) => handleChartHover(evt, fit),
       onClick: (evt) => handleChartClick(evt, fit)
     },
     plugins: [{
@@ -394,8 +387,64 @@ function renderChart(data, fit) {
 }
 
 /**
+ * On hover, show a custom tooltip with the fit-curve PSA when the cursor
+ * is near the exponential fit line. The tooltip follows the cursor and
+ * snaps its y-value to the fit curve.
+ */
+function handleChartHover(evt, fit) {
+  if (!psaChart) return;
+  const tooltip = getCustomTooltip();
+  const pos = Chart.helpers.getRelativePosition(evt, psaChart);
+  const area = psaChart.chartArea;
+
+  if (pos.x < area.left || pos.x > area.right || pos.y < area.top || pos.y > area.bottom) {
+    tooltip.style.display = 'none';
+    return;
+  }
+
+  const xMs = psaChart.scales.x.getValueForPixel(pos.x);
+  if (xMs == null) { tooltip.style.display = 'none'; return; }
+
+  const hoverDate = new Date(xMs);
+  const dx  = (hoverDate.getTime() - fit.firstDate.getTime()) / MS_PER_DAY;
+  const psa = fit.A * Math.exp(fit.B * dx);
+
+  // Check if cursor is near the fit line (within 30px vertically)
+  const fitYPixel = psaChart.scales.y.getPixelForValue(psa);
+  if (Math.abs(pos.y - fitYPixel) > 30) {
+    tooltip.style.display = 'none';
+    return;
+  }
+
+  tooltip.innerHTML = '<strong>' + fmtDate(hoverDate) + '</strong><br>PSA: ' + psa.toFixed(2) + ' ng/mL';
+  tooltip.style.display = 'block';
+
+  // Position relative to the canvas
+  const canvasRect = psaChart.canvas.getBoundingClientRect();
+  const tipX = canvasRect.left + window.scrollX + pos.x + 14;
+  const tipY = canvasRect.top + window.scrollY + fitYPixel - 20;
+  tooltip.style.left = tipX + 'px';
+  tooltip.style.top  = tipY + 'px';
+}
+
+/** Create or retrieve the custom floating tooltip element. */
+function getCustomTooltip() {
+  let el = document.getElementById('psaFitTooltip');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'psaFitTooltip';
+    el.style.cssText = 'position:absolute;pointer-events:none;padding:6px 10px;' +
+      'border-radius:6px;font-size:13px;line-height:1.4;z-index:100;' +
+      'background:rgba(30,30,30,0.92);color:#eee;border:1px solid rgba(255,255,255,0.15);' +
+      'white-space:nowrap;display:none;';
+    document.body.appendChild(el);
+  }
+  return el;
+}
+
+/**
  * On click, compute the expected PSA from the fit curve
- * at the clicked x position and display it.
+ * at the clicked x position and display it in the info box.
  */
 function handleChartClick(evt, fit) {
   if (!psaChart) return;
@@ -410,8 +459,8 @@ function handleChartClick(evt, fit) {
 
   const el = document.getElementById('clickInfo');
   el.innerHTML =
-    `<strong>${fmtDate(clickedDate)}</strong> &nbsp;&rarr;&nbsp; ` +
-    `PSA: <strong>${psa.toFixed(2)} ng/mL</strong>`;
+    '<strong>' + fmtDate(clickedDate) + '</strong> &nbsp;&rarr;&nbsp; ' +
+    'PSA: <strong>' + psa.toFixed(2) + ' ng/mL</strong>';
   el.style.display = 'block';
 }
 

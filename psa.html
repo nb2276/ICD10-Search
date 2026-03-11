@@ -99,7 +99,7 @@
               </div>
               <p class="chart-hint">Hover over the fit line for PSA values. Click anywhere for the projected PSA at that date.</p>
               <div id="clickInfo" class="click-info" style="display:none;"></div>
-              <canvas id="psaChart"></canvas>
+              <canvas id="psaChart" onmouseleave="var t=document.getElementById('psaFitTooltip');if(t)t.style.display='none';"></canvas>
             </div>
           </div>
         </div><!-- end .psa-col-right -->

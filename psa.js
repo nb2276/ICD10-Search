@@ -112,7 +112,11 @@ const MS_PER_DAY = 86400000;
  *
  * x is measured in days from the first data point.
  *
- * Returns { A, B, doublingTimeDays, firstDate, pts } or null on failure.
+ * Also computes the variance-covariance matrix for ln(A) and B so that
+ * confidence bands can be drawn around the projection.
+ *
+ * Returns { A, B, doublingTimeDays, firstDate, pts, varA, varB, covAB, n }
+ * or null on failure.
  */
 function fitExponential(data) {
   const valid = data.filter(d => d.psaValue > 0);
@@ -142,10 +146,26 @@ function fitExponential(data) {
   if (Math.abs(denom) < 1e-15) return null;
 
   const B = (S1 * S5 - S2 * S4) / denom;
-  const A = Math.exp((S4 - B * S2) / S1);
+  const lnA = (S4 - B * S2) / S1;
+  const A = Math.exp(lnA);
   const doublingTimeDays = Math.log(2) / B;
 
-  return { A, B, doublingTimeDays, firstDate, pts };
+  // Weighted residual variance for the linearised model: ln(y) = lnA + B*x
+  const n = pts.length;
+  let ssRes = 0;
+  for (const { x, y } of pts) {
+    const w   = y * y;
+    const r   = Math.log(y) - lnA - B * x;
+    ssRes += w * r * r;
+  }
+  const s2 = n > 2 ? ssRes / (n - 2) : 0;
+
+  // Variance-covariance of (lnA, B)
+  const varLnA = s2 * S3 / denom;
+  const varB   = s2 * S1 / denom;
+  const covAB  = -s2 * S2 / denom;
+
+  return { A, B, doublingTimeDays, firstDate, pts, varLnA, varB, covAB, n };
 }
 
 // -------------------------------------------------------------------------
@@ -156,6 +176,7 @@ let psaChart  = null;
 let whiteMode = false;
 let lastData  = null;
 let lastFit   = null;
+let defaultProjectionYears = 2;
 
 function fmtDate(date) {
   return date.toLocaleDateString('en-US', {
@@ -170,19 +191,63 @@ function fmtDoublingTime(days) {
   return `${(days / 365.25).toFixed(2)} years  (${(days / 30.44).toFixed(1)} months)`;
 }
 
-/** Generate weekly points along the fitted curve from startDate to endDate. */
+/**
+ * Generate weekly points along the fitted curve from startDate to endDate.
+ * Also returns upper and lower 95% confidence bands when variance info is
+ * available (n >= 3).
+ */
 function buildCurve(fit, startDate, endDate) {
   const STEP = 7 * MS_PER_DAY;
-  const pts = [];
+  const pts   = [];
+  const upper = [];
+  const lower = [];
+
+  // t-distribution critical value for 95% CI (two-tailed)
+  const tCrit = tValue95(fit.n - 2);
+  const hasBands = fit.n >= 3 && fit.varLnA != null;
+
   let t = startDate.getTime();
   const end = endDate.getTime();
   while (t <= end) {
     const dx  = (t - fit.firstDate.getTime()) / MS_PER_DAY;
     const psa = fit.A * Math.exp(fit.B * dx);
     pts.push({ x: new Date(t), y: psa });
+
+    if (hasBands) {
+      // Variance of ln(ŷ) = Var(lnA) + dx² * Var(B) + 2*dx*Cov(lnA,B)
+      const varLnY = fit.varLnA + dx * dx * fit.varB + 2 * dx * fit.covAB;
+      const se = Math.sqrt(Math.max(0, varLnY));
+      upper.push({ x: new Date(t), y: psa * Math.exp(tCrit * se) });
+      lower.push({ x: new Date(t), y: psa * Math.exp(-tCrit * se) });
+    }
+
     t += STEP;
   }
-  return pts;
+  return { pts, upper, lower, hasBands };
+}
+
+/**
+ * Approximate two-tailed t critical value at 95% for given degrees of freedom.
+ * Uses a small lookup + linear interpolation; accurate enough for CI bands.
+ */
+function tValue95(df) {
+  if (df <= 0) return 12.706;
+  const table = [
+    [1, 12.706], [2, 4.303], [3, 3.182], [4, 2.776], [5, 2.571],
+    [6, 2.447], [7, 2.365], [8, 2.306], [9, 2.262], [10, 2.228],
+    [15, 2.131], [20, 2.086], [30, 2.042], [60, 2.000], [120, 1.980],
+    [Infinity, 1.960]
+  ];
+  for (let i = 0; i < table.length; i++) {
+    if (df <= table[i][0]) {
+      if (i === 0) return table[0][1];
+      const [d0, t0] = table[i - 1];
+      const [d1, t1] = table[i];
+      const frac = (df - d0) / (d1 - d0);
+      return t0 + frac * (t1 - t0);
+    }
+  }
+  return 1.96;
 }
 
 function renderChart(data, fit) {
@@ -194,44 +259,73 @@ function renderChart(data, fit) {
   const titleColor  = light ? '#444'    : '#777';
 
   const MS_PER_YEAR = 365.25 * MS_PER_DAY;
-  const projYrs     = Math.max(0.5, parseFloat(document.getElementById('projectionYears').value) || 5);
+  const projYrs     = Math.max(0.5, parseFloat(document.getElementById('projectionYears').value) || defaultProjectionYears);
   const chartStart  = new Date(data[0].date);
   const chartEnd    = new Date(data[data.length - 1].date.getTime() + projYrs * MS_PER_YEAR);
 
-  const curve    = buildCurve(fit, chartStart, chartEnd);
+  const { pts: curve, upper, lower, hasBands } = buildCurve(fit, chartStart, chartEnd);
   const measured = data.map(d => ({ x: new Date(d.date), y: d.psaValue }));
 
   if (psaChart) { psaChart.destroy(); psaChart = null; }
 
   const ctx = document.getElementById('psaChart').getContext('2d');
 
+  const datasets = [
+    {
+      label: 'Measured PSA',
+      data: measured,
+      backgroundColor: '#4fc3f7',
+      borderColor: '#4fc3f7',
+      pointRadius: 6,
+      pointHoverRadius: 9,
+      order: 1
+    },
+    {
+      label: 'Exponential Fit',
+      data: curve,
+      type: 'line',
+      borderColor: '#ef5350',
+      backgroundColor: 'rgba(239,83,80,0.08)',
+      fill: false,
+      pointRadius: 0,
+      borderWidth: 2.5,
+      tension: 0,
+      order: 2
+    }
+  ];
+
+  if (hasBands) {
+    datasets.push({
+      label: '95% CI',
+      data: upper,
+      type: 'line',
+      borderColor: 'rgba(239,83,80,0.3)',
+      backgroundColor: 'rgba(239,83,80,0.10)',
+      fill: '+1',   // fill between this dataset and the next (lower)
+      pointRadius: 0,
+      borderWidth: 1,
+      borderDash: [4, 4],
+      tension: 0,
+      order: 3
+    });
+    datasets.push({
+      label: '95% CI Lower',
+      data: lower,
+      type: 'line',
+      borderColor: 'rgba(239,83,80,0.3)',
+      backgroundColor: 'transparent',
+      fill: false,
+      pointRadius: 0,
+      borderWidth: 1,
+      borderDash: [4, 4],
+      tension: 0,
+      order: 4
+    });
+  }
+
   psaChart = new Chart(ctx, {
     type: 'scatter',
-    data: {
-      datasets: [
-        {
-          label: 'Measured PSA',
-          data: measured,
-          backgroundColor: '#4fc3f7',
-          borderColor: '#4fc3f7',
-          pointRadius: 6,
-          pointHoverRadius: 9,
-          order: 1
-        },
-        {
-          label: 'Exponential Fit',
-          data: curve,
-          type: 'line',
-          borderColor: '#ef5350',
-          backgroundColor: 'rgba(239,83,80,0.08)',
-          fill: true,
-          pointRadius: 0,
-          borderWidth: 2.5,
-          tension: 0,
-          order: 2
-        }
-      ]
-    },
+    data: { datasets },
     options: {
       responsive: true,
       animation: { duration: 400 },
@@ -239,13 +333,18 @@ function renderChart(data, fit) {
         tooltip: {
           mode: 'nearest',
           intersect: false,
+          filter: item => item.dataset.label !== '95% CI' && item.dataset.label !== '95% CI Lower',
           callbacks: {
             title: items => fmtDate(new Date(items[0].parsed.x)),
-            label: item  => `${item.dataset.label}: ${item.parsed.y.toFixed(3)} ng/mL`
+            label: item  => `PSA: ${item.parsed.y.toFixed(2)} ng/mL`
           }
         },
         legend: {
-          labels: { color: legendColor, padding: 16 }
+          labels: {
+            color: legendColor,
+            padding: 16,
+            filter: item => item.text !== '95% CI Lower'
+          }
         }
       },
       scales: {
@@ -449,7 +548,11 @@ function calculate() {
   lastData = data;
   lastFit  = fit;
 
-  document.getElementById('projectionYears').value = 2;
+  // Default projection: 50% of the input date range, clamped between 0.5 and 5 years
+  const dataSpanMs = data[data.length - 1].date.getTime() - data[0].date.getTime();
+  const dataSpanYrs = dataSpanMs / (365.25 * MS_PER_DAY);
+  defaultProjectionYears = Math.max(0.5, Math.min(5, Math.round(dataSpanYrs * 0.5 * 2) / 2)); // round to nearest 0.5
+  document.getElementById('projectionYears').value = defaultProjectionYears;
 
   document.getElementById('doublingTime').textContent = fmtDoublingTime(fit.doublingTimeDays);
   document.getElementById('clickInfo').style.display = 'none';

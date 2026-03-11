@@ -303,6 +303,7 @@ function renderChart(data, fit) {
       backgroundColor: 'rgba(239,83,80,0.10)',
       fill: '+1',   // fill between this dataset and the next (lower)
       pointRadius: 0,
+      pointHitRadius: 0,
       borderWidth: 1,
       borderDash: [4, 4],
       tension: 0,
@@ -316,6 +317,7 @@ function renderChart(data, fit) {
       backgroundColor: 'transparent',
       fill: false,
       pointRadius: 0,
+      pointHitRadius: 0,
       borderWidth: 1,
       borderDash: [4, 4],
       tension: 0,
@@ -333,7 +335,6 @@ function renderChart(data, fit) {
         tooltip: {
           mode: 'nearest',
           intersect: false,
-          filter: item => item.dataset.label !== '95% CI' && item.dataset.label !== '95% CI Lower',
           callbacks: {
             title: items => fmtDate(new Date(items[0].parsed.x)),
             label: item  => `PSA: ${item.parsed.y.toFixed(2)} ng/mL`

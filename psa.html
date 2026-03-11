@@ -97,9 +97,9 @@
                        value="2" min="0.5" step="0.5" style="width:68px;">
                 <span>years beyond last data point</span>
               </div>
-              <p class="chart-hint">Click anywhere on the chart to see the expected PSA at that date.</p>
+              <p class="chart-hint">Hover over the chart to see the projected PSA at that date.</p>
               <div id="clickInfo" class="click-info" style="display:none;"></div>
-              <canvas id="psaChart"></canvas>
+              <canvas id="psaChart" onmouseleave="if(typeof psaChart!=='undefined'&&psaChart){psaChart._hoverX=null;psaChart.draw();document.getElementById('clickInfo').style.display='none';}"></canvas>
             </div>
           </div>
         </div><!-- end .psa-col-right -->

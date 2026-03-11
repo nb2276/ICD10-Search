@@ -332,14 +332,7 @@ function renderChart(data, fit) {
       responsive: true,
       animation: { duration: 400 },
       plugins: {
-        tooltip: {
-          mode: 'nearest',
-          intersect: false,
-          callbacks: {
-            title: items => fmtDate(new Date(items[0].parsed.x)),
-            label: item  => `PSA: ${item.parsed.y.toFixed(2)} ng/mL`
-          }
-        },
+        tooltip: { enabled: false },
         legend: {
           labels: {
             color: legendColor,
@@ -348,6 +341,7 @@ function renderChart(data, fit) {
           }
         }
       },
+      onHover: (evt) => handleChartHover(evt, fit),
       scales: {
         x: {
           type: 'time',
@@ -365,7 +359,7 @@ function renderChart(data, fit) {
           title: { display: true, text: 'PSA (ng/mL)', color: titleColor }
         }
       },
-      onClick: (evt) => handleChartClick(evt, fit)
+      onClick: (evt) => handleChartHover(evt, fit)
     },
     plugins: [{
       id: 'chartBackground',
@@ -387,29 +381,60 @@ function renderChart(data, fit) {
         c2.fillText('oncologytoolkit.com', chart.width - 10, chart.height - 8);
         c2.restore();
       }
+    },
+    {
+      id: 'crosshair',
+      afterDraw(chart) {
+        if (chart._hoverX == null) return;
+        const area = chart.chartArea;
+        const c2 = chart.canvas.getContext('2d');
+        c2.save();
+        c2.strokeStyle = light ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.25)';
+        c2.lineWidth = 1;
+        c2.setLineDash([4, 4]);
+        c2.beginPath();
+        c2.moveTo(chart._hoverX, area.top);
+        c2.lineTo(chart._hoverX, area.bottom);
+        c2.stroke();
+        c2.restore();
+      }
     }]
   });
 }
 
 /**
- * When the user clicks the chart, compute the expected PSA from the fit
- * at the clicked date and display it.
+ * On hover (or click), compute the expected PSA from the fit curve
+ * at the pointer's x position and display it. Also stores the x pixel
+ * for the crosshair plugin to draw a vertical guide line.
  */
-function handleChartClick(evt, fit) {
+function handleChartHover(evt, fit) {
   if (!psaChart) return;
 
-  const pos  = Chart.helpers.getRelativePosition(evt, psaChart);
-  const xMs  = psaChart.scales.x.getValueForPixel(pos.x);
+  const pos = Chart.helpers.getRelativePosition(evt, psaChart);
+  const area = psaChart.chartArea;
+
+  // Hide when pointer leaves the chart area
+  if (pos.x < area.left || pos.x > area.right || pos.y < area.top || pos.y > area.bottom) {
+    psaChart._hoverX = null;
+    psaChart.draw();
+    document.getElementById('clickInfo').style.display = 'none';
+    return;
+  }
+
+  const xMs = psaChart.scales.x.getValueForPixel(pos.x);
   if (xMs == null) return;
 
-  const clickedDate = new Date(xMs);
-  const dx  = (clickedDate.getTime() - fit.firstDate.getTime()) / MS_PER_DAY;
+  psaChart._hoverX = pos.x;
+  psaChart.draw();
+
+  const hoverDate = new Date(xMs);
+  const dx  = (hoverDate.getTime() - fit.firstDate.getTime()) / MS_PER_DAY;
   const psa = fit.A * Math.exp(fit.B * dx);
 
   const el = document.getElementById('clickInfo');
   el.innerHTML =
-    `<strong>${fmtDate(clickedDate)}</strong> &nbsp;&rarr;&nbsp; ` +
-    `Expected PSA: <strong>${psa.toFixed(3)} ng/mL</strong>`;
+    `<strong>${fmtDate(hoverDate)}</strong> &nbsp;&rarr;&nbsp; ` +
+    `PSA: <strong>${psa.toFixed(2)} ng/mL</strong>`;
   el.style.display = 'block';
 }
 

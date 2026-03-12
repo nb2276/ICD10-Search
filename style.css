@@ -37,6 +37,14 @@ nav {
   text-decoration: none;
   margin-right: 28px;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-logo {
+  height: 22px;
+  width: 22px;
 }
 
 .nav-links {

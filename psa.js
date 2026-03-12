@@ -339,6 +339,19 @@ function renderChart(data, fit) {
             color: legendColor,
             padding: 16,
             filter: item => item.text !== '95% CI Lower'
+          },
+          onClick: function(evt, legendItem, legend) {
+            const ci = legendItem.text === '95% CI';
+            Chart.defaults.plugins.legend.onClick.call(this, evt, legendItem, legend);
+            if (ci) {
+              // Also toggle the hidden CI Lower dataset
+              const chart = legend.chart;
+              const lowerIdx = chart.data.datasets.findIndex(d => d.label === '95% CI Lower');
+              if (lowerIdx !== -1) {
+                chart.getDatasetMeta(lowerIdx).hidden = chart.getDatasetMeta(legendItem.datasetIndex).hidden;
+                chart.update();
+              }
+            }
           }
         }
       },

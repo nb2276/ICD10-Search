@@ -160,6 +160,7 @@ function onCheckboxChange(id, checked) {
     $('dose-' + id).addEventListener('input', updateAll);
     toggleEmptyRow();
     updateOarCount();
+    updateBtnBar();
     updateAll();
   } else if (!checked && addedOarIds.includes(id)) {
     addedOarIds.splice(addedOarIds.indexOf(id), 1);
@@ -169,6 +170,7 @@ function onCheckboxChange(id, checked) {
     if (row) row.remove();
     toggleEmptyRow();
     updateOarCount();
+    updateBtnBar();
   }
 }
 
@@ -283,20 +285,20 @@ function updateAll() {
         dataCells = [
           '<td class="rert-exceeded" title="Volume constraint exceeded">' +
             remCc.toFixed(1) + ' cc \u26a0</td>',
-          '<td class="rert-exceeded">—</td>',
-          '<td class="rert-exceeded">—</td>',
-          '<td class="rert-exceeded">—</td>',
-          '<td class="rert-exceeded">—</td>',
+          '<td class="rert-exceeded col-1fx">—</td>',
+          '<td class="rert-exceeded col-3fx">—</td>',
+          '<td class="rert-exceeded col-5fx">—</td>',
+          '<td class="rert-exceeded col-cfx">—</td>',
         ];
       } else {
         nameHtml  = '<td class="bed-row-label">' + oar.name +
                     '<span class="rert-oar-subtext">' + sub + '</span></td>';
         dataCells = [
           '<td class="bed-result-cell">' + (remCc !== null ? remCc.toFixed(1) + ' cc' : '—') + '</td>',
-          '<td class="rert-report">—</td>',
-          '<td class="rert-report">—</td>',
-          '<td class="rert-report">—</td>',
-          '<td class="rert-report">—</td>',
+          '<td class="rert-report col-1fx">—</td>',
+          '<td class="rert-report col-3fx">—</td>',
+          '<td class="rert-report col-5fx">—</td>',
+          '<td class="rert-report col-cfx">—</td>',
         ];
       }
       row.innerHTML = nameHtml + dataCells.join('');
@@ -335,10 +337,10 @@ function updateAll() {
       dataCells = [
         '<td class="rert-report" title="Time-discounted effective prior EQD2">' +
           fmt(effPrior) + '<span class="rert-report-only-note">eff. prior EQD2</span></td>',
-        '<td class="rert-report">—</td>',
-        '<td class="rert-report">—</td>',
-        '<td class="rert-report">—</td>',
-        '<td class="rert-report">—</td>',
+        '<td class="rert-report col-1fx">—</td>',
+        '<td class="rert-report col-3fx">—</td>',
+        '<td class="rert-report col-5fx">—</td>',
+        '<td class="rert-report col-cfx">—</td>',
       ];
     } else if (exceeded) {
       const sub = oar.constraintText || ('\u2264 ' + oar.constraint + ' Gy EQD2');
@@ -347,10 +349,10 @@ function updateAll() {
       dataCells = [
         '<td class="rert-exceeded" title="Prior dose exceeds or meets constraint">' +
           fmt(remEqd2) + ' \u26a0</td>',
-        '<td class="rert-exceeded">—</td>',
-        '<td class="rert-exceeded">—</td>',
-        '<td class="rert-exceeded">—</td>',
-        '<td class="rert-exceeded">—</td>',
+        '<td class="rert-exceeded col-1fx">—</td>',
+        '<td class="rert-exceeded col-3fx">—</td>',
+        '<td class="rert-exceeded col-5fx">—</td>',
+        '<td class="rert-exceeded col-cfx">—</td>',
       ];
     } else {
       const d1 = remEqd2 !== null ? eqd2ToPhysical(remEqd2, 1,      prAb) : null;
@@ -362,15 +364,231 @@ function updateAll() {
                   '<span class="rert-oar-subtext">' + sub + '</span></td>';
       dataCells = [
         '<td class="bed-result-cell">' + fmt(remEqd2) + '</td>',
-        '<td class="bed-result-cell">' + fmt(d1) + '</td>',
-        '<td class="bed-result-cell">' + fmt(d3) + '</td>',
-        '<td class="bed-result-cell">' + fmt(d5) + '</td>',
-        '<td class="bed-result-cell">' + fmt(dN) + '</td>',
+        '<td class="bed-result-cell col-1fx">' + fmt(d1) + '</td>',
+        '<td class="bed-result-cell col-3fx">' + fmt(d3) + '</td>',
+        '<td class="bed-result-cell col-5fx">' + fmt(d5) + '</td>',
+        '<td class="bed-result-cell col-cfx">' + fmt(dN) + '</td>',
       ];
     }
 
     row.innerHTML = nameHtml + dataCells.join('');
   });
+}
+
+// ============================================================
+// Column visibility
+// ============================================================
+
+function toggleColumn(cls) {
+  const checked = $(cls).checked;
+  document.querySelectorAll('.' + cls).forEach(el => {
+    el.style.display = checked ? '' : 'none';
+  });
+}
+
+// ============================================================
+// Button bar visibility
+// ============================================================
+
+function updateBtnBar() {
+  const bar = $('rert-btn-bar');
+  if (bar) bar.style.display = addedOarIds.length > 0 ? '' : 'none';
+}
+
+// ============================================================
+// Build report text (prior treatment + OAR table)
+// ============================================================
+
+function buildReportText() {
+  const prFx = $('pr-fx').value;
+  const prAb = $('pr-ab').value;
+  const prMo = $('pr-mo').value;
+  const custFx = $('custom-fx').value;
+
+  let text = 'Reirradiation Dose Report\n';
+  text += '========================\n\n';
+  text += 'Prior Treatment\n';
+  text += '  Fractions: ' + prFx + '\n';
+  text += '  \u03b1/\u03b2: ' + prAb + ' Gy\n';
+  text += '  Months since prior RT: ' + prMo + '\n';
+  text += '  Time bucket: ' + getTimeBucketLabel(parseFloat(prMo)) + '\n\n';
+
+  // OAR doses
+  text += 'OAR Doses\n';
+  addedOarIds.forEach(id => {
+    const oar = oarById[id];
+    const dose = $('dose-' + id).value;
+    const eqd2 = $('eqd2disp-' + id).textContent;
+    text += '  ' + oar.name + ': ' + (dose || '—') + (oar.unit === 'cc' ? ' cc' : ' Gy') +
+            (eqd2 ? '  ' + eqd2 : '') + '\n';
+  });
+
+  // Results table
+  text += '\nRemaining Dose Constraints\n';
+
+  const show1 = $('col-1fx').checked;
+  const show3 = $('col-3fx').checked;
+  const show5 = $('col-5fx').checked;
+  const showC = $('col-cfx').checked;
+
+  // Header
+  let hdr = 'OAR'.padEnd(38) + 'Rem. EQD2';
+  if (show1) hdr += '   1 fx';
+  if (show3) hdr += '   3 fx';
+  if (show5) hdr += '   5 fx';
+  if (showC) hdr += '   ' + custFx + ' fx';
+  text += hdr + '\n';
+  text += '-'.repeat(hdr.length) + '\n';
+
+  const rows = $('rert-tbody').querySelectorAll('tr:not(#rert-empty-row)');
+  rows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    if (cells.length < 2) return;
+    let line = (cells[0].textContent.split('\n')[0]).trim().padEnd(38);
+    line += (cells[1].textContent || '').trim().padStart(9);
+    if (show1 && cells[2]) line += (cells[2].textContent || '').trim().padStart(7);
+    if (show3 && cells[3]) line += (cells[3].textContent || '').trim().padStart(7);
+    if (show5 && cells[4]) line += (cells[4].textContent || '').trim().padStart(7);
+    if (showC && cells[5]) line += (cells[5].textContent || '').trim().padStart(7);
+    text += line + '\n';
+  });
+
+  return text;
+}
+
+// ============================================================
+// Copy results
+// ============================================================
+
+function copyRertResults() {
+  const text = buildReportText();
+  const btn = $('rert-copy-btn');
+  navigator.clipboard.writeText(text).then(function() {
+    const orig = btn.textContent;
+    btn.textContent = '\u2713 Copied!';
+    setTimeout(function() { btn.textContent = orig; }, 1500);
+  }).catch(function() {
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    const orig = btn.textContent;
+    btn.textContent = '\u2713 Copied!';
+    setTimeout(function() { btn.textContent = orig; }, 1500);
+  });
+}
+
+// ============================================================
+// Print
+// ============================================================
+
+function printRertResults() {
+  const printWin = window.open('', '_blank');
+  printWin.document.write(buildPrintHtml());
+  printWin.document.close();
+  printWin.focus();
+  printWin.print();
+}
+
+// ============================================================
+// PDF (renders the print view to a downloadable page)
+// ============================================================
+
+function exportRertPdf() {
+  const printWin = window.open('', '_blank');
+  const html = buildPrintHtml().replace('</body>',
+    '<script>setTimeout(function(){window.print();},300);<\/script></body>');
+  printWin.document.write(html);
+  printWin.document.close();
+}
+
+// ============================================================
+// Shared print/PDF HTML builder
+// ============================================================
+
+function buildPrintHtml() {
+  const prFx = $('pr-fx').value;
+  const prAb = $('pr-ab').value;
+  const prMo = $('pr-mo').value;
+  const custFx = $('custom-fx').value;
+
+  const show1 = $('col-1fx').checked;
+  const show3 = $('col-3fx').checked;
+  const show5 = $('col-5fx').checked;
+  const showC = $('col-cfx').checked;
+
+  let html = '<!DOCTYPE html><html><head><meta charset="UTF-8">';
+  html += '<title>Reirradiation Dose Report</title>';
+  html += '<style>';
+  html += 'body{font-family:"DM Sans",system-ui,sans-serif;margin:32px;color:#222;font-size:13px;}';
+  html += 'h2{margin:0 0 4px;font-size:18px;}';
+  html += '.meta{color:#555;margin-bottom:18px;font-size:12px;}';
+  html += 'h3{font-size:14px;margin:18px 0 6px;border-bottom:1px solid #ccc;padding-bottom:4px;}';
+  html += 'table{border-collapse:collapse;width:100%;margin-bottom:16px;}';
+  html += 'th,td{border:1px solid #ccc;padding:5px 8px;text-align:left;font-size:12px;}';
+  html += 'th{background:#f0f0f0;font-weight:600;}';
+  html += 'td.num{text-align:right;}';
+  html += '.exceeded{color:#c62828;font-weight:600;}';
+  html += '.sub{display:block;font-size:10px;color:#777;font-weight:normal;}';
+  html += '.footer{margin-top:24px;font-size:11px;color:#888;border-top:1px solid #ddd;padding-top:8px;}';
+  html += '@media print{body{margin:16px;}}';
+  html += '</style></head><body>';
+
+  html += '<h2>Reirradiation Dose Report</h2>';
+  html += '<div class="meta">oncologytoolkit.com &mdash; Generated ' + new Date().toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) + '</div>';
+
+  // Prior treatment
+  html += '<h3>Prior Treatment</h3>';
+  html += '<table><tr><th>Fractions</th><th>\u03b1/\u03b2 (Gy)</th><th>Months Since RT</th><th>Time Bucket</th></tr>';
+  html += '<tr><td>' + prFx + '</td><td>' + prAb + '</td><td>' + prMo + '</td>';
+  html += '<td>' + getTimeBucketLabel(parseFloat(prMo)) + '</td></tr></table>';
+
+  // OAR doses
+  html += '<h3>OAR Prior Doses</h3>';
+  html += '<table><tr><th>OAR</th><th>Prior Dose</th><th>EQD2 / Effective</th></tr>';
+  addedOarIds.forEach(id => {
+    const oar = oarById[id];
+    const dose = $('dose-' + id).value || '—';
+    const eqd2 = $('eqd2disp-' + id).textContent || '—';
+    const unit = oar.unit === 'cc' ? ' cc' : ' Gy';
+    html += '<tr><td>' + oar.name + '</td><td class="num">' + dose + unit + '</td><td>' + eqd2 + '</td></tr>';
+  });
+  html += '</table>';
+
+  // Results
+  html += '<h3>Remaining Dose Constraints</h3>';
+  html += '<table><tr><th>OAR</th><th>Rem. EQD2 (Gy)</th>';
+  if (show1) html += '<th>1 fx (Gy)</th>';
+  if (show3) html += '<th>3 fx (Gy)</th>';
+  if (show5) html += '<th>5 fx (Gy)</th>';
+  if (showC) html += '<th>' + custFx + ' fx (Gy)</th>';
+  html += '</tr>';
+
+  const rows = $('rert-tbody').querySelectorAll('tr:not(#rert-empty-row)');
+  rows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    if (cells.length < 2) return;
+    const isExceeded = cells[1].classList.contains('rert-exceeded');
+    const cls = isExceeded ? ' class="exceeded"' : ' class="num"';
+    const nameText = cells[0].querySelector('.rert-oar-subtext, .rert-report-only-note');
+    const sub = nameText ? '<span class="sub">' + nameText.textContent + '</span>' : '';
+    const name = cells[0].childNodes[0].textContent.trim();
+    html += '<tr><td>' + name + sub + '</td>';
+    html += '<td' + cls + '>' + cells[1].textContent.trim() + '</td>';
+    if (show1 && cells[2]) html += '<td' + cls + '>' + cells[2].textContent.trim() + '</td>';
+    if (show3 && cells[3]) html += '<td' + cls + '>' + cells[3].textContent.trim() + '</td>';
+    if (show5 && cells[4]) html += '<td' + cls + '>' + cells[4].textContent.trim() + '</td>';
+    if (showC && cells[5]) html += '<td' + cls + '>' + cells[5].textContent.trim() + '</td>';
+    html += '</tr>';
+  });
+  html += '</table>';
+
+  html += '<div class="footer">This report is for educational purposes only and is not a substitute for professional medical advice.</div>';
+  html += '</body></html>';
+  return html;
 }
 
 // ============================================================

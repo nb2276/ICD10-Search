@@ -92,16 +92,25 @@
               Remaining EQD2 = constraint &minus; prior EQD2 &times; (1&nbsp;&minus;&nbsp;TRF).
               Physical dose columns (Gy) convert remaining EQD2 using the prior plan α/β.
             </p>
+
+            <div class="rert-col-toggles">
+              <span class="rert-col-toggle-label">Show columns:</span>
+              <label class="rert-col-toggle"><input type="checkbox" id="col-1fx" checked onchange="toggleColumn('col-1fx')"> 1 fx</label>
+              <label class="rert-col-toggle"><input type="checkbox" id="col-3fx" checked onchange="toggleColumn('col-3fx')"> 3 fx</label>
+              <label class="rert-col-toggle"><input type="checkbox" id="col-5fx" checked onchange="toggleColumn('col-5fx')"> 5 fx</label>
+              <label class="rert-col-toggle"><input type="checkbox" id="col-cfx" checked onchange="toggleColumn('col-cfx')"> Custom fx</label>
+            </div>
+
             <div class="bed-table-wrap">
-              <table class="bed-table rert-results-table">
+              <table class="bed-table rert-results-table" id="rert-table">
                 <thead>
                   <tr>
                     <th class="rert-th-oar">OAR</th>
                     <th>Rem. EQD2<br><span class="rert-col-sub">(Gy)</span></th>
-                    <th>1 fx<br><span class="rert-col-sub">(Gy)</span></th>
-                    <th>3 fx<br><span class="rert-col-sub">(Gy)</span></th>
-                    <th>5 fx<br><span class="rert-col-sub">(Gy)</span></th>
-                    <th>
+                    <th class="col-1fx">1 fx<br><span class="rert-col-sub">(Gy)</span></th>
+                    <th class="col-3fx">3 fx<br><span class="rert-col-sub">(Gy)</span></th>
+                    <th class="col-5fx">5 fx<br><span class="rert-col-sub">(Gy)</span></th>
+                    <th class="col-cfx">
                       <input type="number" id="custom-fx" class="alt-fx-input"
                              value="10" min="1" step="1"
                              title="Custom fraction count"> fx
@@ -117,6 +126,12 @@
                   </tr>
                 </tbody>
               </table>
+            </div>
+
+            <div class="rert-btn-bar" id="rert-btn-bar" style="display:none;">
+              <button class="psa-action-btn" onclick="copyRertResults()" id="rert-copy-btn">Copy Results</button>
+              <button class="psa-action-btn" onclick="printRertResults()">Print</button>
+              <button class="psa-action-btn" onclick="exportRertPdf()">Save PDF</button>
             </div>
           </div>
         </div><!-- end .rert-right -->

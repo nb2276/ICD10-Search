@@ -1293,6 +1293,41 @@ details[open].rert-oar-picker .rert-picker-chevron {
   cursor: pointer;
 }
 
+/* Reirradiation column toggles */
+.rert-col-toggles {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.rert-col-toggle-label {
+  font-size: 12px;
+  color: #888;
+}
+.rert-col-toggle {
+  font-size: 12px;
+  color: #bbb;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.rert-col-toggle input[type="checkbox"] {
+  accent-color: #4fc3f7;
+  width: 13px;
+  height: 13px;
+  cursor: pointer;
+}
+
+/* Reirradiation button bar */
+.rert-btn-bar {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
 /* Attribution footnote (BED / Composite pages) */
 .bed-attribution {
   font-size: 11px;

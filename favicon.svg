@@ -1,6 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Background -->
-  <rect width="64" height="64" rx="10" fill="#1e1e1e"/>
+  <!-- Background (transparent) -->
 
   <!-- Toolbox body -->
   <rect x="5" y="24" width="54" height="34" rx="4" fill="#1a2a3a" stroke="#4fc3f7" stroke-width="2.5"/>

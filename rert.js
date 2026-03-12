@@ -502,19 +502,7 @@ function printRertResults() {
 }
 
 // ============================================================
-// PDF (renders the print view to a downloadable page)
-// ============================================================
-
-function exportRertPdf() {
-  const printWin = window.open('', '_blank');
-  const html = buildPrintHtml().replace('</body>',
-    '<script>setTimeout(function(){window.print();},300);<\/script></body>');
-  printWin.document.write(html);
-  printWin.document.close();
-}
-
-// ============================================================
-// Shared print/PDF HTML builder
+// Shared print HTML builder
 // ============================================================
 
 function buildPrintHtml() {

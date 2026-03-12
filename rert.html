@@ -93,12 +93,19 @@
               Physical dose columns (Gy) convert remaining EQD2 using the prior plan α/β.
             </p>
 
-            <div class="rert-col-toggles">
-              <span class="rert-col-toggle-label">Show columns:</span>
-              <label class="rert-col-toggle"><input type="checkbox" id="col-1fx" checked onchange="toggleColumn('col-1fx')"> 1 fx</label>
-              <label class="rert-col-toggle"><input type="checkbox" id="col-3fx" checked onchange="toggleColumn('col-3fx')"> 3 fx</label>
-              <label class="rert-col-toggle"><input type="checkbox" id="col-5fx" checked onchange="toggleColumn('col-5fx')"> 5 fx</label>
-              <label class="rert-col-toggle"><input type="checkbox" id="col-cfx" checked onchange="toggleColumn('col-cfx')"> Custom fx</label>
+            <div class="rert-toolbar" id="rert-toolbar">
+              <div class="rert-col-toggles">
+                <span class="rert-col-toggle-label">Show columns:</span>
+                <label class="rert-col-toggle"><input type="checkbox" id="col-1fx" checked onchange="toggleColumn('col-1fx')"> 1 fx</label>
+                <label class="rert-col-toggle"><input type="checkbox" id="col-3fx" checked onchange="toggleColumn('col-3fx')"> 3 fx</label>
+                <label class="rert-col-toggle"><input type="checkbox" id="col-5fx" checked onchange="toggleColumn('col-5fx')"> 5 fx</label>
+                <label class="rert-col-toggle"><input type="checkbox" id="col-cfx" checked onchange="toggleColumn('col-cfx')"> Custom fx</label>
+              </div>
+              <div class="rert-btn-bar" id="rert-btn-bar" style="display:none;">
+                <button class="psa-action-btn" onclick="copyRertResults()" id="rert-copy-btn">Copy Results</button>
+                <button class="psa-action-btn" onclick="printRertResults()">Print</button>
+                <button class="psa-action-btn" onclick="exportRertPdf()">Save PDF</button>
+              </div>
             </div>
 
             <div class="bed-table-wrap">
@@ -128,11 +135,6 @@
               </table>
             </div>
 
-            <div class="rert-btn-bar" id="rert-btn-bar" style="display:none;">
-              <button class="psa-action-btn" onclick="copyRertResults()" id="rert-copy-btn">Copy Results</button>
-              <button class="psa-action-btn" onclick="printRertResults()">Print</button>
-              <button class="psa-action-btn" onclick="exportRertPdf()">Save PDF</button>
-            </div>
           </div>
         </div><!-- end .rert-right -->
 

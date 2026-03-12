@@ -373,16 +373,24 @@ function updateAll() {
 
     row.innerHTML = nameHtml + dataCells.join('');
   });
+
+  applyColumnVisibility();
 }
 
 // ============================================================
 // Column visibility
 // ============================================================
 
-function toggleColumn(cls) {
-  const checked = $(cls).checked;
-  document.querySelectorAll('.' + cls).forEach(el => {
-    el.style.display = checked ? '' : 'none';
+function toggleColumn() {
+  applyColumnVisibility();
+}
+
+function applyColumnVisibility() {
+  ['col-1fx', 'col-3fx', 'col-5fx', 'col-cfx'].forEach(cls => {
+    const checked = $(cls).checked;
+    document.querySelectorAll('.' + cls).forEach(el => {
+      el.style.display = checked ? '' : 'none';
+    });
   });
 }
 

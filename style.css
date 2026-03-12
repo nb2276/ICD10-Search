@@ -1293,12 +1293,21 @@ details[open].rert-oar-picker .rert-picker-chevron {
   cursor: pointer;
 }
 
+/* Reirradiation toolbar (toggles + action buttons) */
+.rert-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
 /* Reirradiation column toggles */
 .rert-col-toggles {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 10px;
   flex-wrap: wrap;
 }
 .rert-col-toggle-label {
@@ -1324,7 +1333,6 @@ details[open].rert-oar-picker .rert-picker-chevron {
 .rert-btn-bar {
   display: flex;
   gap: 8px;
-  margin-top: 12px;
   flex-wrap: wrap;
 }
 

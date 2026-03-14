@@ -17,11 +17,16 @@
       gtag('js', new Date());
       gtag('config', 'G-PP2FRCMYS1');
     </script>
+    <script>var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);</script>
   </head>
 
   <body>
     <nav>
       <a class="nav-brand" href="index.html"><img src="favicon.svg" alt="" class="nav-logo">Oncology Toolkit</a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light mode">
+        <span class="icon-moon">&#9790;</span>
+        <span class="icon-sun">&#9728;</span>
+      </button>
       <button class="nav-toggle" onclick="this.closest('nav').classList.toggle('nav-open')" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
@@ -146,6 +151,7 @@
 
     <p class="bed-attribution">BED / EQD2 calculations based on a spreadsheet by Dr. Mike Wahl.</p>
     <script src="bed.js"></script>
+    <script src="theme.js"></script>
     <footer class="site-disclaimer">
       These tools are for educational purposes only and are not a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider.
     </footer>

@@ -518,10 +518,13 @@ function copyResults() {
   const dt          = document.getElementById('doublingTime').textContent;
   const chartCanvas = document.getElementById('psaChart');
 
-  const pad    = 28;
-  const headH  = 64;
-  const rowH   = 26;
-  const tableH = (lastData.length + 2) * rowH + pad * 2;
+  const fontDisplay = 'Outfit, system-ui, sans-serif';
+  const fontBody    = '"DM Sans", system-ui, sans-serif';
+
+  const pad    = 32;
+  const headH  = 80;
+  const rowH   = 30;
+  const tableH = (lastData.length + 2) * rowH + pad * 2 + 12;
   const W      = chartCanvas.width;
   const H      = headH + chartCanvas.height + tableH;
 
@@ -533,31 +536,54 @@ function copyResults() {
   c.fillStyle = '#ffffff';
   c.fillRect(0, 0, W, H);
 
-  const fSize = Math.max(14, Math.round(W / 32));
-  c.fillStyle = '#111111';
-  c.font = `bold ${fSize}px system-ui, sans-serif`;
-  c.fillText('PSA Doubling Time: ' + dt, pad, Math.round(headH * 0.65));
+  // Title
+  const titleSize = Math.max(16, Math.round(W / 28));
+  c.fillStyle = '#1a1a1e';
+  c.font = `700 ${titleSize}px ${fontDisplay}`;
+  c.fillText('PSA Doubling Time', pad, Math.round(headH * 0.48));
 
+  // Doubling time value
+  const valSize = Math.max(14, Math.round(W / 34));
+  c.fillStyle = '#0288d1';
+  c.font = `600 ${valSize}px ${fontDisplay}`;
+  c.fillText(dt, pad, Math.round(headH * 0.82));
+
+  // Chart
   c.drawImage(chartCanvas, 0, headH);
 
-  let y       = headH + chartCanvas.height + pad;
-  const col2x = pad + Math.round(W * 0.22);
-  const tSize = Math.max(12, Math.round(W / 56));
+  // Table
+  let y       = headH + chartCanvas.height + pad + 8;
+  const col2x = pad + Math.round(W * 0.20);
+  const hSize = Math.max(11, Math.round(W / 64));
+  const tSize = Math.max(13, Math.round(W / 50));
 
-  c.fillStyle = '#1565c0';
-  c.font = `bold ${tSize}px monospace`;
+  // Table header
+  c.fillStyle = '#7a7a84';
+  c.font = `600 ${hSize}px ${fontDisplay}`;
   c.fillText('PSA (ng/mL)', pad, y);
   c.fillText('Date', col2x, y);
-  y += 6;
+  y += 8;
 
-  c.fillStyle = '#cccccc';
+  c.fillStyle = '#d8d9de';
   c.fillRect(pad, y, W - pad * 2, 1);
-  y += rowH - 4;
+  y += rowH - 6;
 
-  c.fillStyle = '#111111';
-  c.font = `${tSize}px monospace`;
-  for (const { date, psaValue } of lastData) {
+  // Table rows
+  c.font = `400 ${tSize}px ${fontBody}`;
+  for (let i = 0; i < lastData.length; i++) {
+    const { date, psaValue } = lastData[i];
+
+    // Alternating row background
+    if (i % 2 === 0) {
+      c.fillStyle = '#f5f6f8';
+      c.fillRect(pad - 8, y - rowH + 10, W - pad * 2 + 16, rowH);
+    }
+
+    c.fillStyle = '#1a1a1e';
+    c.font = `500 ${tSize}px ${fontBody}`;
     c.fillText(psaValue.toFixed(3), pad, y);
+    c.fillStyle = '#4a4a52';
+    c.font = `400 ${tSize}px ${fontBody}`;
     c.fillText(fmtDate(date), col2x, y);
     y += rowH;
   }

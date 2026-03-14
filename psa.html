@@ -83,26 +83,28 @@
           <div id="psaError" class="error-msg" style="display:none;"></div>
 
           <div id="psaResults" style="display:none;">
-            <div class="psa-btn-bar">
-              <button class="psa-action-btn" id="whiteModeBtn" onclick="toggleWhiteMode()">White Background</button>
-              <button class="psa-action-btn" id="copyResultsBtn" onclick="copyResults()">Copy Results</button>
-            </div>
-
             <div class="result-card">
               <div class="result-label">PSA Doubling Time</div>
               <div id="doublingTime" class="result-value"></div>
             </div>
 
             <div class="chart-section">
-              <div class="chart-projection-row">
-                <label for="projectionYears">Project curve:</label>
-                <input type="number" id="projectionYears" class="bed-num-input"
-                       value="2" min="0.5" step="0.5" style="width:68px;">
-                <span>years beyond last data point</span>
-              </div>
               <p class="chart-hint">Hover over the fit line for PSA values. Click anywhere for the projected PSA at that date.</p>
               <div id="clickInfo" class="click-info" style="display:none;"></div>
               <canvas id="psaChart" onmouseleave="var t=document.getElementById('psaFitTooltip');if(t)t.style.display='none';"></canvas>
+
+              <div class="psa-chart-controls">
+                <div class="chart-projection-row">
+                  <label for="projectionYears">Project curve:</label>
+                  <input type="number" id="projectionYears" class="bed-num-input"
+                         value="2" min="0.5" step="0.5" style="width:68px;">
+                  <span>years beyond last data point</span>
+                </div>
+                <div class="psa-btn-bar">
+                  <button class="psa-action-btn" id="whiteModeBtn" onclick="toggleWhiteMode()">White Background</button>
+                  <button class="psa-action-btn" id="copyResultsBtn" onclick="copyResults()">Copy Results</button>
+                </div>
+              </div>
             </div>
           </div>
         </div><!-- end .psa-col-right -->

@@ -654,10 +654,18 @@ nav.nav-open .nav-toggle span:nth-child(3) {
 .psa-white-mode .click-info    { color: #333; background: #f5f5f5; border-color: #ddd; }
 
 /* PSA action buttons (white mode toggle, copy) */
+.psa-chart-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
 .psa-btn-bar {
   display: flex;
   gap: 10px;
-  margin-bottom: 14px;
 }
 
 .psa-action-btn {
@@ -830,7 +838,6 @@ nav.nav-open .nav-toggle span:nth-child(3) {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 10px;
   font-size: 13px;
   color: var(--text-secondary);
 }

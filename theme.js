@@ -9,5 +9,6 @@
     document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('theme', next);
     btn.setAttribute('aria-label', next === 'light' ? 'Switch to dark mode' : 'Switch to light mode');
+    window.dispatchEvent(new CustomEvent('themechange', { detail: next }));
   });
 })();

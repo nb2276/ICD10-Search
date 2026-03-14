@@ -250,8 +250,12 @@ function tValue95(df) {
   return 1.96;
 }
 
+function isLightTheme() {
+  return document.documentElement.getAttribute('data-theme') === 'light';
+}
+
 function renderChart(data, fit) {
-  const light       = whiteMode;
+  const light       = whiteMode || isLightTheme();
   const bgColor     = light ? '#ffffff' : '#1a1a1a';
   const gridColor   = light ? '#ddd'    : '#2e2e2e';
   const tickColor   = light ? '#444'    : '#777';
@@ -443,14 +447,23 @@ function handleChartHover(evt, fit) {
 /** Create or retrieve the custom floating tooltip element. */
 function getCustomTooltip() {
   let el = document.getElementById('psaFitTooltip');
+  var light = whiteMode || isLightTheme();
   if (!el) {
     el = document.createElement('div');
     el.id = 'psaFitTooltip';
     el.style.cssText = 'position:absolute;pointer-events:none;padding:6px 10px;' +
       'border-radius:6px;font-size:13px;line-height:1.4;z-index:100;' +
-      'background:rgba(30,30,30,0.92);color:#eee;border:1px solid rgba(255,255,255,0.15);' +
       'white-space:nowrap;display:none;';
     document.body.appendChild(el);
+  }
+  if (light) {
+    el.style.background = 'rgba(255,255,255,0.95)';
+    el.style.color = '#111';
+    el.style.border = '1px solid rgba(0,0,0,0.12)';
+  } else {
+    el.style.background = 'rgba(30,30,30,0.92)';
+    el.style.color = '#eee';
+    el.style.border = '1px solid rgba(255,255,255,0.15)';
   }
   return el;
 }
@@ -641,5 +654,10 @@ document.getElementById('psaInput').addEventListener('keydown', function(e) {
 });
 
 document.getElementById('projectionYears').addEventListener('input', function () {
+  if (lastData && lastFit) renderChart(lastData, lastFit);
+});
+
+// Re-render chart when site-wide theme changes
+window.addEventListener('themechange', function () {
   if (lastData && lastFit) renderChart(lastData, lastFit);
 });

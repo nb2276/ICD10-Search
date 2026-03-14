@@ -188,15 +188,18 @@
   border-radius: var(--radius-sm);
   color: var(--text-secondary);
   cursor: pointer;
-  padding: 5px 8px;
+  padding: 5px 10px;
   margin-left: auto;
-  margin-right: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  gap: 4px;
+  font-size: 13px;
+  font-family: var(--font-body);
   line-height: 1;
+  white-space: nowrap;
   transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+  flex-shrink: 0;
 }
 
 .theme-toggle:hover {
@@ -215,6 +218,7 @@
   .theme-toggle {
     margin-left: auto;
     margin-right: 8px;
+    order: 1;
   }
 }
 

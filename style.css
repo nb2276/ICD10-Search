@@ -445,6 +445,16 @@ nav.nav-open .nav-toggle span:nth-child(3) {
 }
 
 @media (max-width: 700px) {
+  .nav-brand {
+    font-size: 0;
+    gap: 0;
+    margin-right: 0;
+  }
+
+  .nav-brand .nav-logo {
+    font-size: initial;
+  }
+
   .nav-toggle {
     display: flex;
   }

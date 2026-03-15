@@ -251,7 +251,7 @@ body::before {
   z-index: 0;
 }
 
-body > *:not(script) {
+body > *:not(script):not(nav) {
   position: relative;
   z-index: 1;
 }
